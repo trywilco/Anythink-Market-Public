@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   anythink-backend-python:
-    build: ./backend
+    build: backend
     container_name: anythink-backend-python
     command: >
       sh -c "cd backend &&
