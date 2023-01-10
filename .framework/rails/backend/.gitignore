@@ -12,7 +12,7 @@
 /db/*.sqlite3-journal
 
 # Ignore all logfiles and tempfiles.
-/log/.keep
+/log/*
 /tmp/*
 !/log/.keep
 !/tmp/.keep
