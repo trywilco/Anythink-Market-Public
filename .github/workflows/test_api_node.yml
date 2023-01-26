@@ -16,7 +16,6 @@ jobs:
           ref: ${{ github.head_ref }}
 
       - name: Run checks
-        working-directory: .framework/node/backend
         uses: actions/setup-node@v3
         with:
           node-version: "16"
