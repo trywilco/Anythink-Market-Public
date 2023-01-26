@@ -25,14 +25,9 @@ const testItem = async () => {
         password: "wilco1234",
     }
     const response = await createUser(client,user);
-    assert(response.data.user.email === user.username , "User created with bad username ")
+    assert(response.data.user.username === user.username , "User created with bad username ")
     assert(response.data.user.email === user.email , "User created with bad email ")
     assert(!!response.data.user.token , "User created with bad token ")
-    try {
-        await createUser(client,user);
-    } catch (e){
-        console.log(e)
-    }
 
     client.defaults.headers.common["Authorization"] = `Token ${response.data.user.token}`;
     const itemToCreate = {
