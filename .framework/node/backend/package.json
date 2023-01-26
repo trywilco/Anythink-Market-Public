@@ -7,6 +7,7 @@
   },
   "scripts": {
     "start": "node ./app.js",
+    "start-test": "export WILCO_ID=0 && export MONGODB_URI=mongodb://localhost:27017 && node ./app.js ",
     "dev": "nodemon ./app.js",
     "seeds": "node ./scripts/seeds.js",
     "test": "newman run ./tests/api-tests.postman.json -e ./tests/env-api-tests.postman.json",
