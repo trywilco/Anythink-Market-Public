@@ -20,6 +20,7 @@ jobs:
         with:
           node-version: "16"
           cache: "yarn"
+          cache-dependency-path: .framework/node/backend
 
       - run: yarn install
         working-directory: .framework/node/backend
