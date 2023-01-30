@@ -12,11 +12,12 @@ const axios = axiosLib.create({
 });
 
 async function sendEvent(event, metadata) {
-  if (process.env.APP_ENV === 'TEST') {
-    return
+  try {
+    const result = await axios.post(`/users/${WILCO_ID}/event`, JSON.stringify({event, metadata}));
+    return result?.data;
+  } catch (e) {
+    // pass
   }
-  const result = await axios.post(`/users/${WILCO_ID}/event`, JSON.stringify({ event, metadata }));
-  return result.data;
 }
 
 module.exports = {
