@@ -21,5 +21,7 @@ jobs:
           cache: "yarn"
           cache-dependency-path: tests/http-tests
 
+      - run: yarn install
+        working-directory: tests/http-tests
       - run: yarn lint
         working-directory: tests/http-tests
