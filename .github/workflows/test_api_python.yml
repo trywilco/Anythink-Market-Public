@@ -39,13 +39,10 @@ jobs:
       - run: pip install gunicorn
         working-directory: .framework/python/backend
 
-      - run: pip install gunicorn
-        working-directory: .framework/python/backend
-
       - run: SECRET_KEY=secret DATABASE_URL=postgresql://postgres:postgres@localhost/anythink-market alembic upgrade head
         working-directory: .framework/python/backend
 
-      - run: SECRET_KEY=secret DATABASE_URL=postgresql://postgres:postgres@localhost/anythink-market  gunicorn app.main:app --worker-class=uvicorn.workers.UvicornWorker --bind=0.0.0.0:3000 --workers=5
+      - run: SECRET_KEY=secret DATABASE_URL=postgresql://postgres:postgres@localhost/anythink-market  gunicorn app.main:app --worker-class=uvicorn.workers.UvicornWorker --bind=0.0.0.0:3000 --workers=5 >& /dev/null &
         working-directory: .framework/python/backend
 
       - run: yarn install
