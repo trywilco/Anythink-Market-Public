@@ -4,6 +4,7 @@ const axios = require("axios");
 const healthCheck = async (client) => {
   return await client.get(`/health`);
 };
+const a =1;
 
 const createUser = async (client, user) => {
   try {

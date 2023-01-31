@@ -6,7 +6,7 @@
   "scripts": {
     "test": "yarn jest",
     "format": "yarn prettier --write .",
-    "lint": "yarn eslint . && yarn prettier --write ."
+    "lint": "yarn eslint . && yarn prettier -c ."
   },
   "dependencies": {
     "assert": "^2.0.0",

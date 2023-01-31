@@ -5,6 +5,7 @@ on:
 
 jobs:
   lint:
+    name: Lint Tests
     runs-on: ubuntu-latest
     timeout-minutes: 6
     steps:
