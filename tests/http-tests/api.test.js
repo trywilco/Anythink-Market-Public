@@ -1,10 +1,13 @@
 require("dotenv").config();
 const axios = require("axios");
 
+const healthCheck = async (client) => {
+    return await client.get(`/health`);
+};
+
 const createUser = async (client,user) => {
     return await client.post(`/api/users`, {user});
 };
-
 
 const createItem = async (client, item) => {
     const itemRes = await client.post(`/api/items`, {item});
@@ -16,27 +19,31 @@ const createItem = async (client, item) => {
         let client
         beforeAll(()=> {
              client = axios.create({
-                baseURL: "http://localhost:3000",
+                baseURL: "http://localhost:3001",
                 timeout: 10 * 1000
             });
         })
+        it("check server is up and running", async () => {
+            let response;
+            try {
+                response = await healthCheck(client);
+            } catch (e) {
+                console.log(e)
+                console.log(response.status)
+            }
+            expect(response.status)
+
+        })
         it("create user", async ()=> {
-            const username = `user${(Math.random() + 1).toString(36).substring(7)}`;
             const user = {
                 username: "engine",
                 email: "engine@wilco.work",
                 password: "wilco1234",
             };
-            try {
                 const response = await createUser(client, user);
                 expect(response.data.user.username).toBe(user.username);
                 expect(response.data.user.email).toBe(user.email);
                 expect(response.data.user.token).toBeTruthy();
-            } catch (e) {
-                console.log(e)
-            }
-
-
         })
 
         it("create item", async ()=> {
