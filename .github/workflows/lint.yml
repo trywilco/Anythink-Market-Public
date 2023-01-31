@@ -5,7 +5,7 @@ on:
 
 jobs:
   lint:
-    name: Lint Tests
+    name: Pr checks
     runs-on: ubuntu-latest
     timeout-minutes: 6
     steps:
