@@ -21,26 +21,26 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-      steps:
-        - name: Check out project
-          uses: actions/checkout@v2
+    steps:
+      - name: Check out project
+        uses: actions/checkout@v2
 
-        - uses: ruby/setup-ruby@v1
-          with:
-            working-directory: backend
-            bundler-cache: true
+      - uses: ruby/setup-ruby@v1
+        with:
+          working-directory: backend
+          bundler-cache: true
 
 
-      - run: bundle install
-        working-directory: .framework/rails/backend
+    - run: bundle install
+      working-directory: .framework/rails/backend
 
-      - run: DATABASE_URL=postgresql://postgres:postgres@localhost/anythink-market  bin/rails db:create db:migrate
-        working-directory: .framework/rails/backend
+    - run: DATABASE_URL=postgresql://postgres:postgres@localhost/anythink-market  bin/rails db:create db:migrate
+      working-directory: .framework/rails/backend
 
-      - run: DATABASE_URL=postgresql://postgres:postgres@localhost/anythink-market bin/rails s >& /dev/null &
-        working-directory: .framework/rails/backend
+    - run: DATABASE_URL=postgresql://postgres:postgres@localhost/anythink-market bin/rails s >& /dev/null &
+      working-directory: .framework/rails/backend
 
-      - run: yarn install
-        working-directory: tests/http-tests/
-      - run: yarn test
-        working-directory: tests/http-tests/
+    - run: yarn install
+      working-directory: tests/http-tests/
+    - run: yarn test
+      working-directory: tests/http-tests/
