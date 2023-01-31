@@ -22,4 +22,4 @@ jobs:
           cache-dependency-path: tests/http-tests
 
       - run: yarn lint
-        cache-dependency-path: tests/http-tests
+        working-directory: tests/http-tests
