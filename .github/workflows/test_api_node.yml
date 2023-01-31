@@ -32,6 +32,6 @@ jobs:
       - run: WILCO_ID=0 MONGODB_URI=mongodb://localhost/anythink-market yarn start >& /dev/null &
         working-directory: .framework/node/backend
       - run: yarn install
-        working-directory: tests/http-tests/
+        working-directory: tests/API/
       - run: yarn test
-        working-directory: tests/http-tests/
+        working-directory: tests/API/

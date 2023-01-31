@@ -20,9 +20,9 @@ jobs:
         with:
           node-version: "16"
           cache: "yarn"
-          cache-dependency-path: tests/http-tests
+          cache-dependency-path: tests/API
 
       - run: yarn install
-        working-directory: tests/http-tests
+        working-directory: tests/API
       - run: yarn lint
-        working-directory: tests/http-tests
+        working-directory: tests/API

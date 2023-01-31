@@ -46,6 +46,7 @@ jobs:
         working-directory: .framework/python/backend
 
       - run: yarn install
-        working-directory: tests/http-tests/
+        working-directory: tests/API/
+
       - run: yarn test
-        working-directory: tests/http-tests/
+        working-directory: tests/API/
