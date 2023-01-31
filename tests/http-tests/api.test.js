@@ -19,11 +19,11 @@ const createItem = async (client, item) => {
         let client
         beforeAll(()=> {
              client = axios.create({
-                baseURL: "http://localhost:3001",
+                baseURL: "http://localhost:3000",
                 timeout: 10 * 1000
             });
         })
-        it("check server is up and running", async () => {
+        it("check server is up and serving requests", async () => {
             let response;
             try {
                 response = await healthCheck(client);
@@ -35,7 +35,6 @@ const createItem = async (client, item) => {
                 }
             }
             expect(response?.status).toEqual(200)
-
         })
         it("create user", async ()=> {
             const user = {
