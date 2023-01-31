@@ -6,12 +6,22 @@ const healthCheck = async (client) => {
 };
 
 const createUser = async (client,user) => {
-    return await client.post(`/api/users`, {user});
+    try {
+        return await client.post(`/api/users`, {user});
+    } catch (error) {
+        console.error("Create user request failed", error)
+        throw error
+    }
 };
 
 const createItem = async (client, item) => {
-    const itemRes = await client.post(`/api/items`, {item});
-    return itemRes.data?.item;
+    try {
+        const itemRes = await client.post(`/api/items`, {item});
+        return itemRes.data?.item;
+    } catch (error) {
+    console.error("Create Item request failed", error)
+    throw error
+        }
 };
 
 
@@ -38,7 +48,7 @@ const createItem = async (client, item) => {
         })
         it("Create user", async ()=> {
             const user = {
-                username: "engine",
+                // username: "1",
                 email: "engine@wilco.work",
                 password: "wilco1234",
             };
