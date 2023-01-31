@@ -1,0 +1,54 @@
+on:
+  pull_request:
+
+jobs:
+  ci-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    name: Pr checks
+
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_PASSWORD: postgres
+          SECRET_KEY: secret
+          POSTGRES_DB: anythink-market
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Check out project
+        uses: actions/checkout@v2
+
+      - name: Use Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9.13"
+
+
+      - run: pip install -r requirements.txt
+        working-directory: .framework/python/backend
+
+      - run: pip install gunicorn
+        working-directory: .framework/python/backend
+
+      - run: pip install gunicorn
+        working-directory: .framework/python/backend
+
+      - run: /bin/bash -c SECRET_KEY=secret DATABASE_URL=***localhost/anythink-market alembic upgrade head
+        working-directory: .framework/python/backend
+
+
+      - run: /bin/bash -c SECRET_KEY=secret DATABASE_URL=***localhost/anythink-market  gunicorn app.main:app --worker-class=uvicorn.workers.UvicornWorker --bind=0.0.0.0:3000 --workers=5 >& /dev/null &
+        working-directory: .framework/python/backend
+
+      - run: yarn add axios
+        working-directory: .framework/python/backend
+
+      - run: yarn add dotenv
+        working-directory: .framework/python/backend

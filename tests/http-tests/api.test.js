@@ -34,7 +34,7 @@ const createItem = async (client, item) => {
             expect(response.data.user.token).toBeTruthy();
         })
 
-        it("create user", async ()=> {
+        it("create item", async ()=> {
             const username = `user${(Math.random() + 1).toString(36).substring(7)}`;
             const user = {
                 username: username,
@@ -54,7 +54,6 @@ const createItem = async (client, item) => {
 
             const getItem = await client.get(`/api/items/${itemResponse?.slug}`);
             const item = getItem?.data.item;
-            console.log(item)
 
             expect(itemToCreate.title).toBe(item.title);
             expect(itemToCreate.description).toBe(item.description);
