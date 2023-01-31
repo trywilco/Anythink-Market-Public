@@ -23,7 +23,7 @@ const createItem = async (client, item) => {
                 timeout: 10 * 1000
             });
         })
-        it("check server is up and serving requests", async () => {
+        it("Server is up and serving requests", async () => {
             let response;
             try {
                 response = await healthCheck(client);
@@ -36,7 +36,7 @@ const createItem = async (client, item) => {
             }
             expect(response?.status).toEqual(200)
         })
-        it("create user", async ()=> {
+        it("Create user", async ()=> {
             const user = {
                 username: "engine",
                 email: "engine@wilco.work",
@@ -48,7 +48,7 @@ const createItem = async (client, item) => {
                 expect(response.data.user.token).toBeTruthy();
         })
 
-        it("create item", async ()=> {
+        it("Create item", async ()=> {
             const username = `user${(Math.random() + 1).toString(36).substring(7)}`;
             const user = {
                 username: username,
