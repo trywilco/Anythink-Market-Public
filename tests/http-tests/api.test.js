@@ -27,11 +27,14 @@ const createItem = async (client, item) => {
             let response;
             try {
                 response = await healthCheck(client);
-            } catch (e) {
-                console.log(e)
-                console.log(response.status)
+            } catch (error) {
+                if (error.code === 'ECONNREFUSED' || !error.response) {
+                    console.error('Error: Connection refused by server');
+                } else {
+                    console.error("Error: Couldn't connect to server", error);
+                }
             }
-            expect(response.status)
+            expect(response?.status).toEqual(200)
 
         })
         it("create user", async ()=> {
