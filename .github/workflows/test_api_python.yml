@@ -5,9 +5,9 @@ on:
 
 jobs:
   ci-checks:
+    name: Pr checks
     runs-on: ubuntu-latest
     timeout-minutes: 6
-    name: Pr checks
 
     services:
       postgres:
@@ -49,11 +49,7 @@ jobs:
       - run: /bin/bash -c SECRET_KEY=secret DATABASE_URL=***localhost/anythink-market  gunicorn app.main:app --worker-class=uvicorn.workers.UvicornWorker --bind=0.0.0.0:3000 --workers=5 >& /dev/null &
         working-directory: .framework/python/backend
 
-      - run: yarn add axios
-        working-directory: .framework/python/backend
-
-      - run: yarn add dotenv
-        working-directory: .framework/python/backend
-
+      - run: yarn install
+        working-directory: tests/http-tests/
       - run: yarn test
         working-directory: tests/http-tests/

@@ -28,7 +28,6 @@ const createItem = async (client, item) => {
                 password: "wilco1234"
             };
             const response = await createUser(client, user);
-            console.log(response)
             expect(response.data.user.username).toBe(user.username);
             expect(response.data.user.email).toBe(user.email);
             expect(response.data.user.token).toBeTruthy();
