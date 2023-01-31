@@ -1,3 +1,5 @@
+name: Continuous Integration Python
+
 on:
   pull_request:
 
@@ -52,3 +54,6 @@ jobs:
 
       - run: yarn add dotenv
         working-directory: .framework/python/backend
+
+      - run: yarn test
+        working-directory: tests/http-tests/
