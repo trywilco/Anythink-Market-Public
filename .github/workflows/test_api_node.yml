@@ -29,9 +29,15 @@ jobs:
 
       - run: yarn install
         working-directory: .framework/node/backend
+
       - run: WILCO_ID=0 MONGODB_URI=mongodb://localhost/anythink-market yarn start >& /dev/null &
         working-directory: .framework/node/backend
+
       - run: yarn install
         working-directory: tests/API/
+
+      - run: yarn wait-on http://localhost:3000/api/v1/health --timeout 5000  yarn test
+        working-directory: tests/API/
+
       - run: yarn test
         working-directory: tests/API/
