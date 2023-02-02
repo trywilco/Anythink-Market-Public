@@ -41,24 +41,8 @@ describe("Test Items", () => {
   let client;
   // server.js - it also works with plain HTTP
 
-  app.get('/user', function(req, res) {
-    res.status(200).json({ name: 'john' });
-  });
-
-
 // test.js
   const request = require('supertest');
-  const app = require('./server.js')
-
-  describe('GET /user', function() {
-    it('responds with json', function(done) {
-      request(app)
-          .get('/user')
-          .set('Accept', 'application/json')
-          .expect('Content-Type', /json/)
-          .expect(200, done);
-    });
-  });
   beforeAll(() => {
     client = axios.create({
       baseURL: "http://localhost:3000",
