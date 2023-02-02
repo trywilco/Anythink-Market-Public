@@ -9,6 +9,13 @@ app.get('/hello', (req, res) => {
   res.send('Hello World!')
 })
 
+app.post('/:id/event', (req, res) => {
+  const { id } = req?.params;
+  const event = req?.body?.event;
+  console.log('eventEndPoint',{id},{event})
+  res.send('eventEndPoint')
+})
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
@@ -95,4 +102,8 @@ describe("Test Items", () => {
     expect(itemToCreate.title).toBe(item.title);
     expect(itemToCreate.description).toBe(item.description);
   });
+
+  it('finish test', ()=> {
+    process.exit(0);
+  } )
 });
