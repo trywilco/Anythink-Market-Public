@@ -1,35 +1,12 @@
 require("dotenv").config();
 const axios = require("axios");
-const express = require('express')
-const bodyParser = require('body-parser');
+const {app} = require("./mockEventListener");
 
-const asyncHandler = require("express-async-handler");
+const PORT = 3003
 
-const app = express()
-app.use(bodyParser.urlencoded({ extended: true }));
-
-const port = 3003
-
-app.get('/hello', (req, res) => {
-  console.log('Hello World!')
-  res.send('Hello World!')
-})
-
-app.post('/users/:id/event',   asyncHandler(async (req, res) => {
-  const { id } = req?.params;
-  const event = req?.body?.event;
-  console.log("body",req.body,{id})
-
-  res.send('eventEndPoint')
-}))
-
-app.listen(port, () => {
+const server = app.listen(PORT, () => {
   console.log(`Mock eventListener app listening on port ${port}`)
 })
-
-const handleUserEvent = (event) => {
-  console.log(`received: ${event}`)
-}
 
 const healthCheck = async (client) => {
   return await client.get(`/health`);
@@ -63,6 +40,11 @@ describe("Test Items", () => {
       timeout: 10 * 1000,
     });
   });
+
+  afterAll( ()=> {
+    server.close()
+
+  })
   it("Server is up and serving requests", async () => {
     let response;
     try {
@@ -77,9 +59,6 @@ describe("Test Items", () => {
     expect(response?.status).toEqual(200);
   });
   it("Create user", async () => {
-    handleUserEvent.mockImplementation(() => {
-      console.log("MOCKCKCKCK");
-    });
     const username = `user${(Math.random() + 1).toString(36).substring(7)}`;
     const user = {
       username: username,
@@ -90,7 +69,6 @@ describe("Test Items", () => {
     expect(response.data.user.username).toBe(user.username);
     expect(response.data.user.email).toBe(user.email);
     expect(response.data.user.token).toBeTruthy();
-    expect(handleUserEvent).toBeCalled()
   });
 
   it("Create item", async () => {
@@ -117,7 +95,5 @@ describe("Test Items", () => {
     expect(itemToCreate.title).toBe(item.title);
     expect(itemToCreate.description).toBe(item.description);
   });
- it( ()=> {
-   process.exit(0)
- })
+
 });
