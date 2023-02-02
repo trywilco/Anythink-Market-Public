@@ -9,7 +9,7 @@ app.get('/hello', (req, res) => {
   res.send('Hello World!')
 })
 
-app.post('/:id/event', (req, res) => {
+app.post('/users/:id/event', (req, res) => {
   const { id } = req?.params;
   const event = req?.body?.event;
   console.log('eventEndPoint',{id},{event})
