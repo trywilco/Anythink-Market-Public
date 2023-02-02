@@ -1,5 +1,17 @@
 require("dotenv").config();
 const axios = require("axios");
+const express = require('express')
+const app = express()
+const port = 3003
+
+app.get('/hello', (req, res) => {
+  console.log('Hello World!')
+  res.send('Hello World!')
+})
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})
 
 const healthCheck = async (client) => {
   return await client.get(`/health`);
@@ -25,7 +37,28 @@ const createItem = async (client, item) => {
 };
 
 describe("Test Items", () => {
+
   let client;
+  // server.js - it also works with plain HTTP
+
+  app.get('/user', function(req, res) {
+    res.status(200).json({ name: 'john' });
+  });
+
+
+// test.js
+  const request = require('supertest');
+  const app = require('./server.js')
+
+  describe('GET /user', function() {
+    it('responds with json', function(done) {
+      request(app)
+          .get('/user')
+          .set('Accept', 'application/json')
+          .expect('Content-Type', /json/)
+          .expect(200, done);
+    });
+  });
   beforeAll(() => {
     client = axios.create({
       baseURL: "http://localhost:3000",
