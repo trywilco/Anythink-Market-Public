@@ -39,10 +39,6 @@ const createItem = async (client, item) => {
 describe("Test Items", () => {
 
   let client;
-  // server.js - it also works with plain HTTP
-
-// test.js
-  const request = require('supertest');
   beforeAll(() => {
     client = axios.create({
       baseURL: "http://localhost:3000",
