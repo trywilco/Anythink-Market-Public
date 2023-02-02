@@ -18,7 +18,7 @@ app.get('/hello', (req, res) => {
 app.post('/users/:id/event',   asyncHandler(async (req, res) => {
   const { id } = req?.params;
   const event = req?.body?.event;
-  console.log("body",req.body,.{id})
+  console.log("body",req.body,{id})
 
   res.send('eventEndPoint')
 }))
