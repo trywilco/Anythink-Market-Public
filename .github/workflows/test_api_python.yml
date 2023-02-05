@@ -48,8 +48,8 @@ jobs:
       - run: yarn install
         working-directory: tests/API/
 
-      - run: yarn wait-on http://0.0.0.0:3000/health --timeout 20000
-        working-directory: tests/API/
+#      - run: yarn wait-on http://0.0.0.0:3000/health --timeout 20000
+#        working-directory: tests/API/
 
       - run: yarn test
         working-directory: tests/API/
