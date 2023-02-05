@@ -8,13 +8,9 @@ let server;
 
 beforeAll(async () => {
   anythinkClient = new AnythinkClient();
-  console.log("Starting server...");
-  server = app.listen(PORT, () => {
-    console.log(`Mock eventListener app listening on port ${PORT}`);
-  });
+  server = app.listen(PORT, () => {});
 });
 afterAll(async () => {
-  console.log("closing server...");
   server.close();
 });
 
