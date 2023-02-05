@@ -2,8 +2,8 @@ const axiosLib = require("axios");
 const fs = require("fs");
 
 const WILCO_ID = process.env.WILCO_ID || fs.readFileSync('../.wilco', 'utf8')
+const baseURL = process.env.ENGINE_URL || "https://engine.wilco.gg"
 
-const baseURL = 'http://localhost:3003/';
 const axios = axiosLib.create({
   baseURL: baseURL,
   headers: {

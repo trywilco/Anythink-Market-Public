@@ -30,7 +30,7 @@ jobs:
       - run: yarn install
         working-directory: .framework/node/backend
 
-      - run: WILCO_ID=0 MONGODB_URI=mongodb://localhost/anythink-market yarn start >& /dev/null &
+      - run: ENGINE_URL=http://localhost:3003 WILCO_ID=0 MONGODB_URI=mongodb://localhost/anythink-market yarn start >& /dev/null &
         working-directory: .framework/node/backend
 
       - run: yarn install
