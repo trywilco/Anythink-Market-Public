@@ -1,24 +1,19 @@
-const express = require('express')
-const bodyParser = require('body-parser');
-
+const express = require("express");
 const asyncHandler = require("express-async-handler");
+const { eventHandler } = require("./eventHandler");
 
-const app = express()
-app.use(bodyParser.urlencoded({ extended: true }));
+const app = express();
+app.use(express.json());
 
-app.post('/users/:id/event', (req, res) => {
+const PORT = 3003;
+
+app.post(
+  "/users/:id/event",
+  asyncHandler(async (req, res) => {
     const { id } = req?.params;
-    const body = req?.body;
-    console.log({id})
-    console.log({body})
+    eventHandler(req?.body?.event);
+    res.json({});
+  })
+);
 
-
-    res.send('eventEndPoint')
-})
-
-
-const handleUserEvent = (event) => {
-    console.log(`received: ${event}`)
-}
-
-module.exports = {app}
+module.exports = { app };

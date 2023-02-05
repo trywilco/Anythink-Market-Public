@@ -12,8 +12,8 @@ const axios = axiosLib.create({
 });
 
 async function sendEvent(event, metadata) {
-    const result = await axios.post(`/users/${WILCO_ID}/event`, JSON.stringify({ event, metadata }));
-    return result?.data;
+        const result = await axios.post(`/users/${WILCO_ID}/event`, JSON.stringify({event, metadata}));
+        return result?.data;
 }
 
 module.exports = {
