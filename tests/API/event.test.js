@@ -13,6 +13,22 @@ const PORT = 3003;
 let anythinkClient;
 let server;
 
+const expectRepoEventToBeHandled = async (event_name, maxTime = 5000) => {
+  const start = Date.now();
+
+  while (Date.now() - start < maxTime) {
+    try {
+      expect(eventHandler).toBeCalledWith(event_name);
+      return true;
+    } catch (error) {
+      // pass
+    }
+    await sleep(100);
+  }
+
+  throw new Error(`Repo Event ${event_name} wasn't received`);
+};
+
 beforeAll(async () => {
   anythinkClient = new AnythinkClient();
 
@@ -34,7 +50,6 @@ describe("API TEST", () => {
       password: "wilco1234",
     };
     await anythinkClient.createUser(user);
-    await sleep(100); // allow server to handle async callback of handling the event
-    expect(eventHandler).toBeCalledWith("user_created");
+    await expectRepoEventToBeHandled("user_created", 500);
   });
 });
