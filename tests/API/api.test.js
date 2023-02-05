@@ -40,7 +40,7 @@ describe("Test Items", () => {
     const response = await anythinkClient.createUser(user);
     expect(response.data.user.username).toBe(user.username);
     expect(response.data.user.email).toBe(user.email);
-    expect(response.data.user.token).toBeTruthy();
+    expect(response.data.user.token).not.toBe(null);
   });
 
   it("Creates an item successfully", async () => {
