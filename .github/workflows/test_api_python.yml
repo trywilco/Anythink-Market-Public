@@ -42,7 +42,7 @@ jobs:
       - run: SECRET_KEY=secret DATABASE_URL=postgresql://postgres:postgres@localhost/anythink-market alembic upgrade head
         working-directory: .framework/python/backend
 
-      - run: ENGINE_URL=http://localhost:3003 WILCO_ID=0 SECRET_KEY=secret DATABASE_URL=postgresql://postgres:postgres@localhost/anythink-market  gunicorn app.main:app --worker-class=uvicorn.workers.UvicornWorker --bind=0.0.0.0:3000 --workers=5 >& /dev/null &
+      - run: ENGINE_URL=http://localhost:3003 WILCO_ID=0 SECRET_KEY=secret DATABASE_URL=postgresql://postgres:postgres@localhost/anythink-market  gunicorn app.main:app --worker-class=uvicorn.workers.UvicornWorker --bind=0.0.0.0:3000 --workers=5
         working-directory: .framework/python/backend
 
       - run: yarn install
