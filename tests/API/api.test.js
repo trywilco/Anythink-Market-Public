@@ -1,5 +1,4 @@
 require("dotenv").config();
-const axios = require("axios");
 const { AnythinkClient } = require("./anytinkClient");
 const { app } = require("./mockEventListener");
 

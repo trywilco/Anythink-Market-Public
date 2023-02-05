@@ -1,8 +1,7 @@
 require("dotenv").config();
-const axios = require("axios");
 const { app } = require("./mockEventListener");
 const { eventHandler } = require("./eventHandler");
-const { createUser, AnythinkClient } = require("./anytinkClient");
+const { AnythinkClient } = require("./anytinkClient");
 const { sleep } = require("../utils");
 
 jest.mock("./eventHandler");
