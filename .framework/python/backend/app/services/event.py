@@ -16,6 +16,5 @@ def send_event(event, metadata):
     headers = { 'Content-type': 'application/json' }
     data = { 'event': event, 'metadata': metadata }
 
-
     res = requests.post(EVENTS_ENDPOINT, data=json.dumps(data), headers=headers)
     return res
