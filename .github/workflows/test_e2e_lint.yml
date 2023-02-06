@@ -14,5 +14,8 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
+      - run: yarn install
+        working-directory: tests/API
+
       - run: yarn lint
         working-directory: tests/API
