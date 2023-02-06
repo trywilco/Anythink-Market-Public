@@ -9,7 +9,7 @@
     "start": "node ./app.js",
     "dev": "nodemon ./app.js",
     "seeds": "node ./scripts/seeds.js",
-    "test": "newman run ./tests/e2e-tests.postman.json -e ./tests/env-api-tests.postman.json",
+    "test": "newman run ./tests/api-tests.postman.json -e ./tests/env-api-tests.postman.json",
     "stop": "lsof -ti :3000 | xargs kill"
   },
   "dependencies": {
