@@ -1,32 +1,7 @@
-require("dotenv").config();
-const { app } = require("./mockEventListener");
-const { eventHandler } = require("./eventHandler");
 const { AnythinkClient } = require("./anytinkClient");
-const { sleep } = require("../utils");
-
-// jest.mock("./eventHandler");
-
-eventHandler.mockImplementation((event) =>
-  console.log(`mock handling event: ${event}`)
-);
+const { execAndWaitForEvent } = require("./wilcoEngine/utils");
 
 let anythinkClient;
-
-const expectRepoEventToBeHandled = async (event_name, maxTime = 5000) => {
-  const start = Date.now();
-
-  while (Date.now() - start < maxTime) {
-    try {
-      expect(eventHandler).toBeCalledWith(event_name);
-      return true;
-    } catch (error) {
-      // pass
-    }
-    await sleep(100);
-  }
-
-  throw new Error(`Repo Event ${event_name} wasn't received`);
-};
 
 beforeAll(async () => {
   anythinkClient = new AnythinkClient();
@@ -40,7 +15,9 @@ describe("API TEST", () => {
       email: `${username}@test.work`,
       password: "wilco1234",
     };
-    await anythinkClient.createUser(user);
-    await expectRepoEventToBeHandled("user_created", 500);
+
+    await execAndWaitForEvent("user_created", async () => {
+      await anythinkClient.createUser(user);  
+    });
   });
 });

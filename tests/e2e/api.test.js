@@ -1,6 +1,5 @@
 require("dotenv").config();
 const { AnythinkClient } = require("./anytinkClient");
-const { app } = require("./mockEventListener");
 
 let anythinkClient;
 

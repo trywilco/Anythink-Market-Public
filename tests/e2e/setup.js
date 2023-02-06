@@ -1,4 +1,7 @@
-const { startServer } = require("./mockEventListener");
+const { startServer } = require("./wilcoEngine/mockWilcoEngine");
+const EventEmitter = require('events');
+
 module.exports = async function () {
-    startServer();
+    global.eventEmitter = new EventEmitter();
+    startServer();      
   };

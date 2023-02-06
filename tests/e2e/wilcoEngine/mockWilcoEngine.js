@@ -1,6 +1,6 @@
 const express = require("express");
 const asyncHandler = require("express-async-handler");
-const { eventHandler } = require("./eventHandler");
+const { dispatch } = require("./wilcoEngineEvents");
 
 const PORT = 3003;
 let server = null;
@@ -11,7 +11,7 @@ app.use(express.json());
 app.post(
   "/users/:id/event",
   asyncHandler(async (req, res) => {
-    eventHandler(req?.body?.event);
+    dispatch(req?.body?.event);
     res.json({});
   })
 );
