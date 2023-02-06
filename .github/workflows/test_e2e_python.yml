@@ -1,0 +1,60 @@
+name: E2E Python
+
+on:
+  pull_request:
+
+jobs:
+  ci-checks:
+    name: Pr checks
+    runs-on: ubuntu-20.04
+    timeout-minutes: 6
+
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_PASSWORD: postgres
+          SECRET_KEY: secret
+          POSTGRES_DB: anythink-market
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Check out project
+        uses: actions/checkout@v2
+
+      - name: Use Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9.13"
+
+      - uses: oNaiPs/secrets-to-env-action@v1
+        with:
+          secrets: ${{ toJSON(secrets) }}
+
+      - run: pip install -r requirements.txt
+        working-directory: .framework/python/backend
+
+      - run: pip install gunicorn
+        working-directory: .framework/python/backend
+
+      - name: Run postgres migration
+        run: SECRET_KEY=secret DATABASE_URL=postgresql://postgres:postgres@localhost/anythink-market alembic upgrade head
+        working-directory: .framework/python/backend
+
+      - name: Run python server
+        run: ENGINE_BASE_URL=http://localhost:3003 WILCO_ID=0 SECRET_KEY=secret DATABASE_URL=postgresql://postgres:postgres@localhost/anythink-market  gunicorn app.main:app --worker-class=uvicorn.workers.UvicornWorker --bind=0.0.0.0:3000 --workers=5 >& /dev/null &
+        working-directory: .framework/python/backend
+
+      - run: yarn install
+        working-directory: tests/API/
+
+      - run: yarn wait-on -v http-get://0.0.0.0:3000/health --timeout 5000
+        working-directory: tests/API/
+
+      - run: yarn test
+        working-directory: tests/API/

@@ -3,7 +3,7 @@ import requests
 import json
 
 PATH_TO_WILCO_ID = '../.wilco'
-BASE_URL = 'https://engine.wilco.gg'
+BASE_URL = os.environ.get('ENGINE_BASE_URL') or 'https://engine.wilco.gg'
 WILCO_ID = os.environ.get('WILCO_ID')
 
 if not WILCO_ID and os.path.exists(PATH_TO_WILCO_ID):

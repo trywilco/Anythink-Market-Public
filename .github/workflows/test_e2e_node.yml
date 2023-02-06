@@ -1,0 +1,46 @@
+name: E2E Node
+
+on:
+  pull_request:
+
+jobs:
+  ci-checks:
+    name: Pr checks
+    runs-on: ubuntu-20.04
+    timeout-minutes: 6
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Run checks
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+          cache: "yarn"
+          cache-dependency-path: .framework/node/backend
+
+      - uses: oNaiPs/secrets-to-env-action@v1
+        with:
+          secrets: ${{ toJSON(secrets) }}
+
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.6.0
+        with:
+          mongodb-version: "4.4"
+
+      - run: yarn install
+        working-directory: .framework/node/backend
+
+      - run: ENGINE_BASE_URL=http://localhost:3003 WILCO_ID=0 MONGODB_URI=mongodb://localhost/anythink-market yarn start >& /dev/null &
+        working-directory: .framework/node/backend
+
+      - run: yarn install
+        working-directory: tests/API/
+
+      - run: yarn wait-on http://localhost:3000/health --timeout 5000
+        working-directory: tests/API/
+
+      - run: yarn test
+        working-directory: tests/API/

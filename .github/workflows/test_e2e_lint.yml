@@ -1,0 +1,21 @@
+name: Lint
+
+on:
+  pull_request:
+
+jobs:
+  lint:
+    name: Pr checks
+    runs-on: ubuntu-20.04
+    timeout-minutes: 6
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+
+      - run: yarn install
+        working-directory: tests/API
+
+      - run: yarn lint
+        working-directory: tests/API
