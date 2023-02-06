@@ -17,7 +17,7 @@ describe("API TEST", () => {
     };
 
     await execAndWaitForEvent("user_created", async () => {
-      await anythinkClient.createUser(user);  
+      await anythinkClient.createUser(user);
     });
   });
 });

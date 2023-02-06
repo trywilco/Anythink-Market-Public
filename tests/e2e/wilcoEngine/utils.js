@@ -2,30 +2,30 @@ const { sleep } = require("../../utils");
 const { subscribe, ubsubscribe } = require("./wilcoEngineEvents");
 
 const execAndWaitForEvent = async (type, func, maxTime = 500) => {
-    let eventReceived = false;
-    const eventCallback = () => {
-        eventReceived = true;
-    };
+  let eventReceived = false;
+  const eventCallback = () => {
+    eventReceived = true;
+  };
 
-    subscribe(type, eventCallback);
+  subscribe(type, eventCallback);
 
-    await func();
+  await func();
 
-    const start = Date.now();
+  const start = Date.now();
 
-    while (Date.now() - start < maxTime) {
-        if (eventReceived) {
-            break;
-        }
-
-        await sleep(100);
+  while (Date.now() - start < maxTime) {
+    if (eventReceived) {
+      break;
     }
 
-    ubsubscribe(type, eventCallback);
+    await sleep(100);
+  }
 
-    if (!eventReceived) {
-        throw new Error(`Event ${type} not caught within ${maxTime}ms`);
-    }
+  ubsubscribe(type, eventCallback);
+
+  if (!eventReceived) {
+    throw new Error(`Event ${type} not caught within ${maxTime}ms`);
+  }
 };
 
 module.exports = { execAndWaitForEvent };
