@@ -1,4 +1,4 @@
-name: Continuous Integration Node
+name: E2E Node
 
 on:
   pull_request:
@@ -12,7 +12,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          # Make sure the actual branch is checked out when running on pull requests
           ref: ${{ github.head_ref }}
 
       - name: Run checks
@@ -22,6 +21,10 @@ jobs:
           cache: "yarn"
           cache-dependency-path: .framework/node/backend
 
+      - uses: oNaiPs/secrets-to-env-action@v1
+        with:
+          secrets: ${{ toJSON(secrets) }}
+
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.6.0
         with:
@@ -30,7 +33,7 @@ jobs:
       - run: yarn install
         working-directory: .framework/node/backend
 
-      - run: ENGINE_URL=http://localhost:3003 WILCO_ID=0 MONGODB_URI=mongodb://localhost/anythink-market yarn start >& /dev/null &
+      - run: ENGINE_BASE_URL=http://localhost:3003 WILCO_ID=0 MONGODB_URI=mongodb://localhost/anythink-market yarn start >& /dev/null &
         working-directory: .framework/node/backend
 
       - run: yarn install

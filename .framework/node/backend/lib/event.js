@@ -2,7 +2,7 @@ const axiosLib = require("axios");
 const fs = require("fs");
 
 const WILCO_ID = process.env.WILCO_ID || fs.readFileSync('../.wilco', 'utf8')
-const baseURL = process.env.ENGINE_URL || "https://engine.wilco.gg"
+const baseURL = process.env.ENGINE_BASE_URL || "https://engine.wilco.gg"
 
 const axios = axiosLib.create({
   baseURL: baseURL,
@@ -13,7 +13,7 @@ const axios = axiosLib.create({
 
 async function sendEvent(event, metadata) {
     const result = await axios.post(`/users/${WILCO_ID}/event`, JSON.stringify({event, metadata}));
-    return result?.data;
+    return result.data;
 }
 
 module.exports = {

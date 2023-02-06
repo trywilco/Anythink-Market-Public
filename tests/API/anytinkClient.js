@@ -4,7 +4,7 @@ class AnythinkClient {
   constructor() {
     this.client = axios.create({
       baseURL: "http://localhost:3000",
-      timeout: 10 * 1000,
+      timeout: 1000,
     });
   }
 
