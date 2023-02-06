@@ -2,16 +2,10 @@ require("dotenv").config();
 const { AnythinkClient } = require("./anytinkClient");
 const { app } = require("./mockEventListener");
 
-const PORT = 3003;
 let anythinkClient;
-let server;
 
 beforeAll(async () => {
   anythinkClient = new AnythinkClient();
-  server = app.listen(PORT, () => {});
-});
-afterAll(async () => {
-  server.close();
 });
 
 describe("Test Items", () => {
@@ -19,7 +13,7 @@ describe("Test Items", () => {
     let response;
     try {
       response = await anythinkClient.healthCheck();
-    } catch (error) {
+    } catch (error) { 
       if (error.code === "ECONNREFUSED" || !error.response) {
         console.error("Error: Connection refused by server");
         throw new Error("Error: Connection refused by server");

@@ -44,10 +44,10 @@ jobs:
         working-directory: .framework/rails/backend
 
       - run: yarn install
-        working-directory: tests/API/
+        working-directory: tests/e2e/
 
       - run: yarn wait-on http://localhost:3000/health --timeout 5000
-        working-directory: tests/API/
+        working-directory: tests/e2e/
 
       - run: yarn test
-        working-directory: tests/API/
+        working-directory: tests/e2e/
