@@ -11,7 +11,7 @@ beforeAll(async () => {
 describe("Ping Route", () => {
   it("Sends ping event to the Wilco Engine", async () => {
     await execAndWaitForEvent("ping", async () => {
-        await anythinkClient.ping();
-      });
-  });  
+      await anythinkClient.ping();
+    });
+  });
 });

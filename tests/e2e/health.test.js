@@ -11,5 +11,5 @@ describe("Health Route", () => {
   it("Returns valid response", async () => {
     const response = await anythinkClient.healthCheck();
     expect(response?.status).toEqual(200);
-  });  
+  });
 });
