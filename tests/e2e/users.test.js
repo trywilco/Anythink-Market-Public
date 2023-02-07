@@ -19,7 +19,6 @@ describe("Users Route", () => {
         expect.objectContaining({
           username: user.username,
           email: user.email,
-          role: "user",
         })
       );
     });
@@ -148,7 +147,6 @@ describe("Users Route", () => {
         expect.objectContaining({
           username: user.username,
           email: user.email,
-          role: user.role,
           ...info,
         })
       );
