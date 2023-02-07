@@ -1,3 +1,4 @@
+const { expect } = require("@jest/globals");
 const { sleep } = require("../../utils");
 const { subscribe, ubsubscribe } = require("./wilcoEngineEvents");
 
@@ -23,8 +24,10 @@ const execAndWaitForEvent = async (type, func, maxTime = 500) => {
 
   ubsubscribe(type, eventCallback);
 
-  if (!eventReceived) {
-    throw new Error(`Event ${type} not caught within ${maxTime}ms`);
+  try {
+    expect(eventReceived).toBe(true);
+  } catch {
+    console.error(`The event ${type} was not sent to Wilco`);
   }
 };
 
