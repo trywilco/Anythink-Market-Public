@@ -12,8 +12,12 @@ const axios = axiosLib.create({
 });
 
 async function sendEvent(event, metadata) {
-    const result = await axios.post(`/users/${WILCO_ID}/event`, JSON.stringify({event, metadata}));
-    return result.data;
+    try {
+        const result = await axios.post(`/users/${WILCO_ID}/event`, JSON.stringify({event, metadata}));
+        return result.data;
+    } catch (error) {
+        console.error(`failed to send event ${event} to Wilco engine`)
+    }
 }
 
 module.exports = {
