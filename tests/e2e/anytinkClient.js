@@ -48,10 +48,6 @@ class AnythinkClient {
       throw error;
     }
   }
-
-  async ping() {
-
-  }
 }
 
 module.exports = { AnythinkClient };
