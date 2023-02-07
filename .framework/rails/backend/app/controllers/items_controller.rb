@@ -70,7 +70,7 @@ class ItemsController < ApplicationController
     @item = Item.find_by!(slug: params[:slug])
 
     if @item.user_id == @current_user_id
-      @item.update_attributes(item_params)
+      @item.update(item_params)
 
       render :show
     else
