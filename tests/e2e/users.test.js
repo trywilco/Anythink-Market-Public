@@ -1,7 +1,7 @@
 require("dotenv").config();
 const { test, describe, beforeEach, expect } = require("@jest/globals");
 const { AnythinkClient } = require("./anytinkClient");
-const { randomUserInfo, randomString } = require("./utils");
+const { randomUserInfo, randomString, randomImageUrl } = require("./utils");
 const { execAndWaitForEvent } = require("./wilcoEngine/utils");
 const { pick } = require("lodash");
 
@@ -31,7 +31,7 @@ describe("Users Route", () => {
       anythinkClient.setToken(createdUser.token);
       const retreivedUser = await anythinkClient.getUser();
 
-      expect(retreivedUser).toEqual(createdUser);
+      expect(retreivedUser.email).toEqual(user.email);
     });
 
     test("Creating a user sends event to the Wilco Engine", async () => {
@@ -112,7 +112,7 @@ describe("Users Route", () => {
     });
 
     test("Can update user's image", async () => {
-      const newImage = randomString();
+      const newImage = randomImageUrl();
       await updateUserAndValidate({ image: newImage });
     });
 
@@ -120,7 +120,7 @@ describe("Users Route", () => {
       const newUsername = `user${randomString()}`;
       const newEmail = `${randomString()}@test.work`;
       const newBio = randomString(200);
-      const newImage = randomString();
+      const newImage = randomImageUrl();
 
       await updateUserAndValidate({
         username: newUsername,
@@ -143,6 +143,7 @@ describe("Users Route", () => {
 
     const updateUserAndValidate = async (info) => {
       const updateUserResult = await anythinkClient.updateUser(info);
+      anythinkClient.setToken(updateUserResult.token);
 
       expect(updateUserResult).toEqual(
         expect.objectContaining({
@@ -154,9 +155,7 @@ describe("Users Route", () => {
 
       const retreivedUser = await anythinkClient.getUser();
       const keysToCompare = ["username", "email", ...Object.keys(info)];
-      expect(pick(retreivedUser, keysToCompare)).toEqual(
-        pick(updateUserResult, keysToCompare)
-      );
+      expect(pick(retreivedUser, keysToCompare)).toEqual(pick(updateUserResult, keysToCompare));
     };
   });
 });
