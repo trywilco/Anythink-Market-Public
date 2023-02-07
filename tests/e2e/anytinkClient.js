@@ -16,6 +16,10 @@ class AnythinkClient {
     return await this.client.get(`/health`);
   }
 
+  async ping() {
+    return await this.client.get(`/api/ping`);
+  }
+  
   async createUser(user) {
     try {
       return await this.client.post(`/api/users`, { user });
@@ -43,6 +47,10 @@ class AnythinkClient {
       console.error("Create Item request failed", error?.response?.data);
       throw error;
     }
+  }
+
+  async ping() {
+
   }
 }
 
