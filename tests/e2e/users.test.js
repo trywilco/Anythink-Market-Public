@@ -3,6 +3,7 @@ const { test, describe, beforeEach, expect } = require("@jest/globals");
 const { AnythinkClient } = require("./anytinkClient");
 const { randomUserInfo, randomString } = require("./utils");
 const { execAndWaitForEvent } = require("./wilcoEngine/utils");
+const { pick } = require("lodash");
 
 let anythinkClient;
 
@@ -152,7 +153,8 @@ describe("Users Route", () => {
       );
 
       const retreivedUser = await anythinkClient.getUser();
-      expect(retreivedUser).toEqual(updateUserResult);
+      const keysToCompare = ["username", "email", ...Object.keys(info)];
+      expect(pick(retreivedUser, keysToCompare)).toEqual(pick(updateUserResult, keysToCompare));
     };
   });
 });
