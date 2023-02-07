@@ -27,7 +27,7 @@ const execAndWaitForEvent = async (type, func, maxTime = 500) => {
   try {
     expect(eventReceived).toBe(true);
   } catch {
-    console.error(`The event ${type} was not sent to Wilco`);
+    throw new Error(`The event ${type} was not sent to Wilco`);
   }
 };
 
