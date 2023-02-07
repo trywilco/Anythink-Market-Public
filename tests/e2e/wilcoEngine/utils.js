@@ -1,6 +1,6 @@
 const { expect } = require("@jest/globals");
 const { sleep } = require("../../utils");
-const { subscribe, ubsubscribe } = require("./wilcoEngineEvents");
+const { subscribe, unsubscribe } = require("./wilcoEngineEvents");
 
 const execAndWaitForEvent = async (eventType, func, maxTime = 500) => {
   let eventReceived = false;
@@ -22,7 +22,7 @@ const execAndWaitForEvent = async (eventType, func, maxTime = 500) => {
     await sleep(100);
   }
 
-  ubsubscribe(eventType, eventCallback);
+  unsubscribe(eventType, eventCallback);
 
   try {
     expect(eventReceived).toBe(true);
