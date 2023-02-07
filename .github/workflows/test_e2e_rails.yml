@@ -40,7 +40,7 @@ jobs:
       - run: DATABASE_URL=postgresql://postgres:postgres@localhost/anythink-market  bin/rails db:create db:migrate
         working-directory: .framework/rails/backend
 
-      - run: ENGINE_BASE_URL=http://localhost:3003 WILCO_ID=0 DATABASE_URL=postgresql://postgres:postgres@localhost/anythink-market bin/rails s >& /dev/null &
+      - run: WILCO_ID=0 DATABASE_URL=postgresql://postgres:postgres@localhost/anythink-market bin/rails s >& /dev/null &
         working-directory: .framework/rails/backend
 
       - run: yarn install
