@@ -2,13 +2,13 @@ const { expect } = require("@jest/globals");
 const { sleep } = require("../../utils");
 const { subscribe, ubsubscribe } = require("./wilcoEngineEvents");
 
-const execAndWaitForEvent = async (type, func, maxTime = 500) => {
+const execAndWaitForEvent = async (eventType, func, maxTime = 500) => {
   let eventReceived = false;
   const eventCallback = () => {
     eventReceived = true;
   };
 
-  subscribe(type, eventCallback);
+  subscribe(eventType, eventCallback);
 
   await func();
 
@@ -22,12 +22,12 @@ const execAndWaitForEvent = async (type, func, maxTime = 500) => {
     await sleep(100);
   }
 
-  ubsubscribe(type, eventCallback);
+  ubsubscribe(eventType, eventCallback);
 
   try {
     expect(eventReceived).toBe(true);
   } catch {
-    throw new Error(`The event ${type} was not sent to Wilco`);
+    throw new Error(`The event ${eventType} was not sent to Wilco`);
   }
 };
 
