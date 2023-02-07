@@ -1,4 +1,4 @@
-const { test, it } = require("@jest/globals");
+const { it } = require("@jest/globals");
 const { AnythinkClient } = require("./anytinkClient");
 
 let anythinkClient;

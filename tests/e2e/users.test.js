@@ -1,7 +1,7 @@
 require("dotenv").config();
 const { test, describe, beforeEach, expect } = require("@jest/globals");
 const { AnythinkClient } = require("./anytinkClient");
-const { randomUserInfo, randomString, randomInt } = require("./utils");
+const { randomUserInfo, randomString } = require("./utils");
 const { execAndWaitForEvent } = require("./wilcoEngine/utils");
 
 let anythinkClient;
