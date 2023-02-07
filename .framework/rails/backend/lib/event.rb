@@ -6,10 +6,13 @@ module Event
       url: baseUrl + "/users/#{wilcoId}/",
       headers: {'Content-Type' => 'application/json'}
     )
-
-    response = conn.post('event') do |req|
-      req.headers['Content-Type'] = 'application/json'
-      req.body = { event: eventName, metadata: metadata}.to_json
+    begin
+      response = conn.post('event') do |req|
+        req.headers['Content-Type'] = 'application/json'
+        req.body = { event: eventName, metadata: metadata}.to_json
+      end
+    rescue Exception => e
+      puts 'failed to send event #{wilcoId} to Wilco engine'
     end
     response
   end

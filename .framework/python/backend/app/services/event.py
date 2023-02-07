@@ -15,6 +15,8 @@ EVENTS_ENDPOINT = f'{BASE_URL}/users/{WILCO_ID}/event'
 def send_event(event, metadata):
     headers = { 'Content-type': 'application/json' }
     data = { 'event': event, 'metadata': metadata }
-
-    res = requests.post(EVENTS_ENDPOINT, data=json.dumps(data), headers=headers)
-    return res
+    try:
+        res = requests.post(EVENTS_ENDPOINT, data=json.dumps(data), headers=headers)
+        return res
+    except Exception as err:
+        print(f"failed to send event {event} to Wilco engine")
