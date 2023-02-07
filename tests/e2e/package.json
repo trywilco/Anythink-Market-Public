@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "yarn jest",
+    "test": "yarn jest -c jest.e2e.config.js --maxWorkers=1",
     "format": "yarn prettier --write .",
     "lint": "yarn eslint . && yarn prettier -c ."
   },

@@ -1,17 +1,10 @@
 require("dotenv").config();
 const { AnythinkClient } = require("./anytinkClient");
-const { app } = require("./mockEventListener");
 
-const PORT = 3003;
 let anythinkClient;
-let server;
 
 beforeAll(async () => {
   anythinkClient = new AnythinkClient();
-  server = app.listen(PORT, () => {});
-});
-afterAll(async () => {
-  server.close();
 });
 
 describe("Test Items", () => {

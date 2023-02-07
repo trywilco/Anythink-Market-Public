@@ -15,7 +15,7 @@ jobs:
           ref: ${{ github.head_ref }}
 
       - run: yarn install
-        working-directory: tests/API
+        working-directory: tests/e2e
 
       - run: yarn lint
-        working-directory: tests/API
+        working-directory: tests/e2e

@@ -51,10 +51,10 @@ jobs:
         working-directory: .framework/python/backend
 
       - run: yarn install
-        working-directory: tests/API/
+        working-directory: tests/e2e/
 
       - run: yarn wait-on -v http-get://0.0.0.0:3000/health --timeout 5000
-        working-directory: tests/API/
+        working-directory: tests/e2e/
 
       - run: yarn test
-        working-directory: tests/API/
+        working-directory: tests/e2e/
