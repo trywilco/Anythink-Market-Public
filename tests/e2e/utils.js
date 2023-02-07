@@ -10,8 +10,8 @@ function randomString(length = 10) {
   return result.join("");
 }
 
-function randomImageUrl(){
-    return `http://web.page/${randomString()}.png`
+function randomImageUrl() {
+  return `http://web.page/${randomString()}.png`;
 }
 
 function randomUserInfo(info = null) {
