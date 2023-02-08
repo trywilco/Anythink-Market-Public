@@ -28,12 +28,16 @@ describe("Items Route", () => {
       expect(receivedItem).toMatchObject(createdItem);
     });
 
-    test("Can create item without description", async () => {
-      const createdItem = await anythinkClient.createItem(
-        randomItemInfo({ description: undefined })
-      );
-      expect(createdItem.description).toBeFalsy();
-      expect(createdItem.slug).toBeDefined();
+    test("Can't create item without title", async () => {
+      await expect(
+        anythinkClient.createItem(randomItemInfo({ title: undefined }))
+      ).rejects.toThrow();
+    });
+
+    test("Can't create item without description", async () => {
+      await expect(
+        anythinkClient.createItem(randomItemInfo({ description: undefined }))
+      ).rejects.toThrow();
     });
 
     test("Can create item without image", async () => {
