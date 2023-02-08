@@ -33,7 +33,7 @@ class ItemsController < ApplicationController
             following: signed_in? ? current_user.following?(item.user) : false,
           },
           favorited: signed_in? ? current_user.favorited?(item) : false,
-          favorites_count: item.favorites_count || 0
+          favoritesCount: item.favorites_count || 0
         }
       },
       items_count: @items_count
