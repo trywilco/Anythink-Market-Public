@@ -70,7 +70,7 @@ describe("Items Route", () => {
 
   describe("Delete item", () => {
     let user;
-    let otherUser
+    let otherUser;
 
     beforeAll(async () => {
       user = await anythinkClient.createUser(randomUserInfo());
@@ -90,7 +90,9 @@ describe("Items Route", () => {
       const createdItem = await anythinkClient.createItem(randomItemInfo());
 
       anythinkClient.setToken(user.token);
-      await expect(anythinkClient.deleteItem(createdItem.slug)).rejects.toThrow();
+      await expect(
+        anythinkClient.deleteItem(createdItem.slug)
+      ).rejects.toThrow();
     });
   });
 
@@ -145,4 +147,6 @@ describe("Items Route", () => {
       expect(retreivedItem).toMatchObject(updatedItemResult);
     };
   });
+
+  describe("Favorite Item", () => {});
 });
