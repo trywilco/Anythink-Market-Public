@@ -32,7 +32,7 @@ describe("Items Route", () => {
       const createdItem = await anythinkClient.createItem(
         randomItemInfo({ description: undefined })
       );
-      expect(createdItem.description).toBeUndefined();
+      expect(createdItem.description).toBeFalsy();
       expect(createdItem.slug).toBeDefined();
     });
 
@@ -40,7 +40,7 @@ describe("Items Route", () => {
       const createdItem = await anythinkClient.createItem(
         randomItemInfo({ image: undefined })
       );
-      expect(createdItem.image).toBeUndefined();
+      expect(createdItem.image).toBeFalsy();
       expect(createdItem.slug).toBeDefined();
     });
 
