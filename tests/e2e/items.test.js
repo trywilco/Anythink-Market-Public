@@ -1,7 +1,11 @@
 const { beforeAll, expect } = require("@jest/globals");
-const { sleep } = require("../utils");
 const { AnythinkClient } = require("./anytinkClient");
-const { randomItemInfo, randomUserInfo, randomImageUrl, randomString } = require("./utils");
+const {
+  randomItemInfo,
+  randomUserInfo,
+  randomImageUrl,
+  randomString,
+} = require("./utils");
 const { execAndWaitForEvent } = require("./wilcoEngine/utils");
 
 let anythinkClient;
