@@ -72,32 +72,35 @@ class ItemsRepository(BaseRepository):  # noqa: WPS214
         title: Optional[str] = None,
         body: Optional[str] = None,
         description: Optional[str] = None,
-        image: Optional[str] = None,
+        image: Optional[str] = None, 
         tags: Optional[Sequence[str]] = None,
     ) -> Item:
         updated_item = item.copy(deep=True)
-        updated_item.slug = slug or updated_item.slug
         updated_item.title = title or item.title
-        updated_item.body = body or item.body        
+        updated_item.body = body or item.body
         updated_item.description = description or item.description
         updated_item.image = image or item.image
-        updated_item.tags = tags or item.tags
 
         async with self.connection.transaction():
             updated_item.updated_at = await queries.update_item(
                 self.connection,
                 slug=item.slug,
-                seller_username=item.seller.username,
-                new_slug=updated_item.slug,
+                seller_username=item.seller.username,            
                 new_title=updated_item.title,
                 new_body=updated_item.body,
                 new_description=updated_item.description,
                 new_image=updated_item.image,
-                new_tags=updated_item.tags,
             )
 
-        return updated_item
+        if tags:
+            await self._tags_repo.create_tags_that_dont_exist(tags=tags)
+            await self._link_item_with_tags(slug=item.slug, tags=tags)
 
+        return await self.get_item_by_slug(
+            slug=item.slug,
+            requested_user=item.seller,
+        )
+f
     async def delete_item(self, *, item: Item) -> None:
         async with self.connection.transaction():
             await queries.delete_item(
