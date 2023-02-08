@@ -1,4 +1,4 @@
-const { it, beforeAll, expect } = require("@jest/globals");
+const { beforeAll, expect } = require("@jest/globals");
 const { AnythinkClient } = require("./anytinkClient");
 const { randomItemInfo, randomUserInfo, randomImageUrl } = require("./utils");
 const { execAndWaitForEvent } = require("./wilcoEngine/utils");
@@ -29,19 +29,25 @@ describe("Items Route", () => {
     });
 
     test("Can create item without description", async () => {
-      const createdItem = await anythinkClient.createItem(randomItemInfo({ description: undefined }));
+      const createdItem = await anythinkClient.createItem(
+        randomItemInfo({ description: undefined })
+      );
       expect(createdItem.description).toBeUndefined();
       expect(createdItem.slug).toBeDefined();
     });
 
     test("Can create item without image", async () => {
-      const createdItem = await anythinkClient.createItem(randomItemInfo({ image: undefined }));
+      const createdItem = await anythinkClient.createItem(
+        randomItemInfo({ image: undefined })
+      );
       expect(createdItem.image).toBeUndefined();
       expect(createdItem.slug).toBeDefined();
     });
 
     test("Can create item without tagList", async () => {
-      const createdItem = await anythinkClient.createItem(randomItemInfo({ tagList: undefined }));
+      const createdItem = await anythinkClient.createItem(
+        randomItemInfo({ tagList: undefined })
+      );
       expect(createdItem.tagList).toStrictEqual([]);
       expect(createdItem.slug).toBeDefined();
     });
@@ -55,9 +61,9 @@ describe("Items Route", () => {
 
   describe("Update Item", () => {
     let user;
-    
+
     beforeAll(async () => {
-      user = await anythinkClient.createUser(randomUserInfo());      
+      user = await anythinkClient.createUser(randomUserInfo());
       anythinkClient.setToken(user.token);
     });
 
@@ -65,7 +71,7 @@ describe("Items Route", () => {
       const updateInfo = { title: "New Title" };
       await createAndValidateUpdate(updateInfo);
     });
-    
+
     test("Can update description of an item", async () => {
       const updateInfo = { description: "New Description" };
       await createAndValidateUpdate(updateInfo);
@@ -95,17 +101,18 @@ describe("Items Route", () => {
     const createAndValidateUpdate = async (updateInfo) => {
       const origItemInfo = randomItemInfo();
       const item = await anythinkClient.createItem(origItemInfo);
-      const updatedItemResult = await anythinkClient.updateItem(item.slug, updateInfo);
-
-      expect(updatedItemResult).toMatchObject(
-        {
-        ...origItemInfo,
-        ...updateInfo
-        }
+      const updatedItemResult = await anythinkClient.updateItem(
+        item.slug,
+        updateInfo
       );
 
+      expect(updatedItemResult).toMatchObject({
+        ...origItemInfo,
+        ...updateInfo,
+      });
+
       const retreivedItem = await anythinkClient.getItem(item.slug);
-      expect(retreivedItem).toMatchObject(updatedItemResult);      
+      expect(retreivedItem).toMatchObject(updatedItemResult);
     };
   });
 });
