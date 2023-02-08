@@ -44,9 +44,13 @@ jobs:
         run:  WILCO_ID=0 REACT_APP_BACKEND_URL=http://localhost:3000 PORT=3001 yarn start >& /dev/null &
         working-directory: .framework/react/frontend
 
+      - name: Install test deps
+        run: yarn install
+        working-directory: tests/frontend
+
       - name: Install playwright
         run: yarn add playwright
-        working-directory: .framework/react/frontend
+        working-directory: tests/frontend
 
 #      - name: Install playwright chrome
 #        run: yarn playwright install-deps chromium
