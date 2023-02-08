@@ -1,4 +1,4 @@
-const { beforeAll, expect } = require("@jest/globals");
+const { beforeAll, expect, describe } = require("@jest/globals");
 const { AnythinkClient } = require("./anytinkClient");
 const {
   randomItemInfo,
@@ -65,6 +65,32 @@ describe("Items Route", () => {
       await execAndWaitForEvent("item_created", async () => {
         await anythinkClient.createItem(randomItemInfo());
       });
+    });
+  });
+
+  describe("Delete item", () => {
+    let user;
+    let otherUser
+
+    beforeAll(async () => {
+      user = await anythinkClient.createUser(randomUserInfo());
+      anythinkClient.setToken(user.token);
+    });
+
+    test("Can delete item", async () => {
+      const createdItem = await anythinkClient.createItem(randomItemInfo());
+      await anythinkClient.deleteItem(createdItem.slug);
+      await expect(anythinkClient.getItem(createdItem.slug)).rejects.toThrow();
+    });
+
+    test("Can't delete item created by other user", async () => {
+      const otherUser = await anythinkClient.createUser(randomUserInfo());
+      anythinkClient.setToken(otherUser.token);
+
+      const createdItem = await anythinkClient.createItem(randomItemInfo());
+
+      anythinkClient.setToken(user.token);
+      await expect(anythinkClient.deleteItem(createdItem.slug)).rejects.toThrow();
     });
   });
 
