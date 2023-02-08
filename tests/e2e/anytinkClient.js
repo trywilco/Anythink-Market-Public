@@ -47,6 +47,11 @@ class AnythinkClient {
     return itemRes.data?.item;
   }
 
+  async updateItem(slug, item) {
+    const itemRes = await this.client.put(`/api/items/${slug}`, { item });
+    return itemRes.data?.item;
+  }
+  
   async getItem(slug) {
     const itemRes = await this.client.get(`/api/items/${slug}`);
     return itemRes.data?.item;

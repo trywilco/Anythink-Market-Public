@@ -24,8 +24,19 @@ function randomUserInfo(info = null) {
   };
 }
 
+function randomItemInfo(info = null) {
+  return {
+    title: randomString(),
+    description: randomString(),
+    image: randomImageUrl(),
+    tagList: [randomString(), randomString()],
+    ...info,
+  };
+}
+
 module.exports = {
   randomString,
   randomImageUrl,
   randomUserInfo,
+  randomItemInfo,
 };
