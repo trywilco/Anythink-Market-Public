@@ -1,7 +1,7 @@
 from typing import List, Optional, Sequence, Union
 
 from asyncpg import Connection, Record
-from pypika import Query
+from pypika import Query, Order
 
 from app.db.errors import EntityDoesNotExist
 from app.db.queries.queries import queries
@@ -144,6 +144,8 @@ class ItemsRepository(BaseRepository):  # noqa: WPS214
             ).as_(
                 SELLER_USERNAME_ALIAS,
             ),
+        ).orderby(
+            items.created_at, order=Order.desc,
         )
         # fmt: on
 
