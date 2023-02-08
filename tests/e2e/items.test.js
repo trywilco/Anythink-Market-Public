@@ -77,7 +77,6 @@ describe("Items Route", () => {
 
   describe("Delete item", () => {
     let user;
-    let otherUser;
 
     beforeAll(async () => {
       user = await anythinkClient.createUser(randomUserInfo());
@@ -348,7 +347,6 @@ describe("Items Route", () => {
 
     let followedUserAItems;
     let followedUserBItems;
-    let unfollowedUserItems;
 
     beforeEach(async () => {
       user = await anythinkClient.createUser(randomUserInfo());
@@ -358,7 +356,7 @@ describe("Items Route", () => {
 
       followedUserAItems = await createItems(followedUserA, 7);
       followedUserBItems = await createItems(followedUserB, 12);
-      unfollowedUserItems = await createItems(unfollowedUser, 5);
+      await createItems(unfollowedUser, 5);
 
       await anythinkClient.followUser(followedUserA.username, user);
       await anythinkClient.followUser(followedUserB.username, user);

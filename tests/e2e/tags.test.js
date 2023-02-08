@@ -1,4 +1,3 @@
-const { it } = require("@jest/globals");
 const { AnythinkClient } = require("./anytinkClient");
 const { randomString, randomItemInfo, randomUserInfo } = require("./utils");
 
