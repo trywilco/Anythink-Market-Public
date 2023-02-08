@@ -43,7 +43,7 @@ SET username        = :new_username,
     salt            = :new_salt,
     hashed_password = :new_password,
     bio             = :new_bio,
-    image           = :new_image,
+    image           = :new_image
 WHERE username = :username
 RETURNING
     updated_at;

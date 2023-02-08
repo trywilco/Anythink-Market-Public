@@ -94,13 +94,14 @@ class ItemsRepository(BaseRepository):  # noqa: WPS214
 
         if tags:
             await self._tags_repo.create_tags_that_dont_exist(tags=tags)
+            await self._unlink_item_from_tags(slug=item.slug)
             await self._link_item_with_tags(slug=item.slug, tags=tags)
 
         return await self.get_item_by_slug(
             slug=item.slug,
             requested_user=item.seller,
         )
-f
+
     async def delete_item(self, *, item: Item) -> None:
         async with self.connection.transaction():
             await queries.delete_item(
@@ -341,4 +342,10 @@ f
         await queries.add_tags_to_item(
             self.connection,
             [{SLUG_ALIAS: slug, "tag": tag} for tag in tags],
+        )
+
+    async def _unlink_item_with_tags(self, *, slug: str) -> None:
+        await queries.delete_tags_from_item(
+            self.connection,
+                slug=slug,
         )

@@ -11,58 +11,58 @@ beforeAll(async () => {
 });
 
 describe("Items Route", () => {
-  // describe("Create Item", () => {
-  //   let user;
+  describe("Create Item", () => {
+    let user;
 
-  //   beforeAll(async () => {
-  //     user = await anythinkClient.createUser(randomUserInfo());
-  //     anythinkClient.setToken(user.token);
-  //   });
+    beforeAll(async () => {
+      user = await anythinkClient.createUser(randomUserInfo());
+      anythinkClient.setToken(user.token);
+    });
 
-  //   test("Can create and retreive an item", async () => {
-  //     const item = randomItemInfo();
+    test("Can create and retreive an item", async () => {
+      const item = randomItemInfo();
 
-  //     const createdItem = await anythinkClient.createItem(item);
-  //     expect(createdItem).toMatchObject(item);
+      const createdItem = await anythinkClient.createItem(item);
+      expect(createdItem).toMatchObject(item);
 
-  //     const receivedItem = await anythinkClient.getItem(createdItem.slug);
-  //     expect(receivedItem).toMatchObject(createdItem);
-  //   });
+      const receivedItem = await anythinkClient.getItem(createdItem.slug);
+      expect(receivedItem).toMatchObject(createdItem);
+    });
 
-  //   test("Can't create item without title", async () => {
-  //     await expect(
-  //       anythinkClient.createItem(randomItemInfo({ title: undefined }))
-  //     ).rejects.toThrow();
-  //   });
+    test("Can't create item without title", async () => {
+      await expect(
+        anythinkClient.createItem(randomItemInfo({ title: undefined }))
+      ).rejects.toThrow();
+    });
 
-  //   test("Can't create item without description", async () => {
-  //     await expect(
-  //       anythinkClient.createItem(randomItemInfo({ description: undefined }))
-  //     ).rejects.toThrow();
-  //   });
+    test("Can't create item without description", async () => {
+      await expect(
+        anythinkClient.createItem(randomItemInfo({ description: undefined }))
+      ).rejects.toThrow();
+    });
 
-  //   test("Can create item without image", async () => {
-  //     const createdItem = await anythinkClient.createItem(
-  //       randomItemInfo({ image: undefined })
-  //     );
-  //     expect(createdItem.image).toBeFalsy();
-  //     expect(createdItem.slug).toBeDefined();
-  //   });
+    test("Can create item without image", async () => {
+      const createdItem = await anythinkClient.createItem(
+        randomItemInfo({ image: undefined })
+      );
+      expect(createdItem.image).toBeFalsy();
+      expect(createdItem.slug).toBeDefined();
+    });
 
-  //   test("Can create item without tagList", async () => {
-  //     const createdItem = await anythinkClient.createItem(
-  //       randomItemInfo({ tagList: undefined })
-  //     );
-  //     expect(createdItem.tagList).toStrictEqual([]);
-  //     expect(createdItem.slug).toBeDefined();
-  //   });
+    test("Can create item without tagList", async () => {
+      const createdItem = await anythinkClient.createItem(
+        randomItemInfo({ tagList: undefined })
+      );
+      expect(createdItem.tagList).toStrictEqual([]);
+      expect(createdItem.slug).toBeDefined();
+    });
 
-  //   test("Creating item sends item_created event to the Wilco Engine", async () => {
-  //     await execAndWaitForEvent("item_created", async () => {
-  //       await anythinkClient.createItem(randomItemInfo());
-  //     });
-  //   });
-  // });
+    test("Creating item sends item_created event to the Wilco Engine", async () => {
+      await execAndWaitForEvent("item_created", async () => {
+        await anythinkClient.createItem(randomItemInfo());
+      });
+    });
+  });
 
   describe("Update Item", () => {
     let user;
@@ -87,21 +87,15 @@ describe("Items Route", () => {
       await createAndValidateUpdate(updateInfo);
     });
 
-    test("Can update tagList of an item", async () => {
-      const updateInfo = { tagList: ["tag1", "tag2"] };
+    test("Can update all fields of an item", async () => {
+      const updateInfo = {
+        title: "New Title",
+        description: "New Description",
+        image: randomImageUrl(),
+      };
+
       await createAndValidateUpdate(updateInfo);
     });
-
-    // test("Can update all fields of an item", async () => {
-    //   const updateInfo = {
-    //     title: "New Title",
-    //     description: "New Description",
-    //     image: randomImageUrl(),
-    //     tagList: ["tag1", "tag2"],
-    //   };
-
-    //   await createAndValidateUpdate(updateInfo);
-    // });
 
     const createAndValidateUpdate = async (updateInfo) => {
       const origItemInfo = randomItemInfo();
