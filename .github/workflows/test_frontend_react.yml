@@ -40,9 +40,9 @@ jobs:
         run: yarn install
         working-directory: .framework/react/frontend
 
-       - name: Install playwright chrome
-         run: yarn playwright install-deps chromium
-         working-directory: tests/frontend
+      - name: Install playwright chrome
+        run: yarn playwright install-deps chromium
+        working-directory: tests/frontend
 
       - name: Run Playwright tests
         run: yarn playwright test
