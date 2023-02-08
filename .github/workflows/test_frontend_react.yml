@@ -45,7 +45,7 @@ jobs:
         working-directory: tests/frontend
 
       - name: Run Playwright tests
-        run: yarn playwright test
+        run: yarn test
         working-directory: tests/frontend
 
       - uses: actions/upload-artifact@v3
