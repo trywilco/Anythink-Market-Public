@@ -92,6 +92,8 @@ class ItemsRepository(BaseRepository):  # noqa: WPS214
                 new_title=updated_item.title,
                 new_body=updated_item.body,
                 new_description=updated_item.description,
+                new_image=updated_item.image,
+                new_tags=updated_item.tags,
             )
 
         return updated_item
