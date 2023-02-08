@@ -1,0 +1,56 @@
+name: Playwright Tests
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+jobs:
+  test:
+    timeout-minutes: 6
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+      - name: Run checks
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+          cache: "yarn"
+          cache-dependency-path: .framework/node/backend
+
+      - uses: oNaiPs/secrets-to-env-action@v1
+        with:
+          secrets: ${{ toJSON(secrets) }}
+
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.6.0
+        with:
+          mongodb-version: "4.4"
+
+      - run: yarn install
+        working-directory: .framework/node/backend
+
+      - name: Run server
+        run: ENGINE_BASE_URL=http://localhost:3003 WILCO_ID=0 MONGODB_URI=mongodb://localhost/anythink-market yarn start >& /dev/null &
+        working-directory: .framework/node/backend
+
+      - name: Install dependencies
+        run: yarn
+        working-directory: .framework/react/frontend
+
+      - name: Install Playwright Browsers
+        run: yarn playwright install --with-deps
+        working-directory: .framework/react/frontend
+
+      - name: Run Playwright tests
+        run: yarn playwright test
+        working-directory: .framework/react/frontend
+
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
