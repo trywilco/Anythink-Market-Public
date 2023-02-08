@@ -37,12 +37,12 @@ jobs:
         working-directory: .framework/node/backend
 
       - name: Install dependencies
-        run: yarn
+        run: yarn install
         working-directory: .framework/react/frontend
 
-      - name: Install Playwright Browsers
-        run: yarn playwright install --with-deps
-        working-directory: .framework/react/frontend
+#      - name: Install Playwright Browsers
+#        run: yarn playwright install --with-deps
+#        working-directory: .framework/react/frontend
 
       - name: Run Playwright tests
         run: yarn playwright test
