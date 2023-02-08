@@ -7,5 +7,7 @@
     "@playwright/test": "^1.30.0",
     "playwright": "^1.30.0"
   },
-  "scripts": {}
+  "scripts": {
+    "test": "playwright test"
+  }
 }
