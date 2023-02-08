@@ -1,5 +1,12 @@
 const axios = require("axios");
 
+const Method = {
+  GET: "GET",
+  POST: "POST",
+  PUT: "PUT",
+  DELETE: "DELETE",
+};
+
 class AnythinkClient {
   constructor() {
     this.client = axios.create({
@@ -8,76 +15,158 @@ class AnythinkClient {
     });
   }
 
-  setToken(token) {
-    this.client.defaults.headers.common["Authorization"] = `Token ${token}`;
+  async #apiCall({ method = Method.GET, url, callingUser, data = null }) {
+    const headers = callingUser
+      ? { Authorization: `Token ${callingUser.token}` }
+      : {};
+
+    return this.client.request({
+      method,
+      url,
+      data,
+      headers,
+    });
   }
 
   async healthCheck() {
-    return await this.client.get(`/health`);
+    return await this.#apiCall({ url: "/health" });
   }
 
   async ping() {
-    return await this.client.get(`/api/ping`);
+    return await this.#apiCall({ url: "/api/ping" });
   }
 
   async createUser(user) {
-    const result = await this.client.post(`/api/users`, { user });
-    return result.data?.user;
-  }
-
-  async loginUser(email, password) {
-    const result = await this.client.post(`/api/users/login`, {
-      user: { email, password },
+    const result = await this.#apiCall({
+      method: Method.POST,
+      url: "/api/users",
+      data: { user },
     });
     return result.data?.user;
   }
 
-  async getUser() {
-    const result = await this.client.get(`/api/user`);
+  async loginUser(email, password) {
+    const result = await this.#apiCall({
+      method: Method.POST,
+      url: "/api/users/login",
+      data: { user: { email, password } },
+    });
     return result.data?.user;
   }
 
-  async updateUser(userInfo) {
-    const result = await this.client.put(`/api/user`, { user: userInfo });
+  async getUser(callingUser) {
+    const result = await this.#apiCall({ url: "/api/user", callingUser });
     return result.data?.user;
   }
 
-  async createItem(item) {
-    const itemRes = await this.client.post(`/api/items`, { item });
-    return itemRes.data?.item;
+  async updateUser(userInfo, callingUser) {
+    const result = await this.#apiCall({
+      method: Method.PUT,
+      url: "/api/user",
+      callingUser,
+      data: { user: userInfo },
+    });
+    return result.data?.user;
   }
 
-  async deleteItem(slug) {
-    await this.client.delete(`/api/items/${slug}`);
+  async createItem(item, callingUser) {
+    const result = await this.#apiCall({
+      method: Method.POST,
+      url: "/api/items",
+      callingUser,
+      data: { item },
+    });
+    return result.data?.item;
   }
 
-  async updateItem(slug, item) {
-    const itemRes = await this.client.put(`/api/items/${slug}`, { item });
-    return itemRes.data?.item;
+  async deleteItem(slug, callingUser) {
+    await this.#apiCall({
+      method: Method.DELETE,
+      url: `/api/items/${slug}`,
+      callingUser,
+    });
   }
 
-  async getItem(slug) {
-    const itemRes = await this.client.get(`/api/items/${slug}`);
-    return itemRes.data?.item;
+  async updateItem(slug, item, callingUser) {
+    const result = await this.#apiCall({
+      method: Method.PUT,
+      url: `/api/items/${slug}`,
+      callingUser,
+      data: { item },
+    });
+    return result.data?.item;
   }
 
-  async followUser(username) {
-    const profileRes = await this.client.post(
-      `/api/profiles/${username}/follow`
-    );
-    return profileRes.data?.profile;
+  async getItem(slug, callingUser) {
+    const result = await this.#apiCall({
+      url: `/api/items/${slug}`,
+      callingUser,
+    });
+    return result.data?.item;
   }
 
-  async unfollowUser(username) {
-    const profileRes = await this.client.delete(
-      `/api/profiles/${username}/follow`
-    );
-    return profileRes.data?.profile;
+  async favoriteItem(slug, callingUser) {
+    const result = await this.#apiCall({
+      method: Method.POST,
+      url: `/api/items/${slug}/favorite`,
+      callingUser,
+    });
+    return result.data?.item;
   }
 
-  async getProfile(username) {
-    const profileRes = await this.client.get(`/api/profiles/${username}`);
-    return profileRes.data?.profile;
+  async unfavoriteItem(slug, callingUser) {
+    const result = await this.#apiCall({
+      method: Method.DELETE,
+      url: `/api/items/${slug}/favorite`,
+      callingUser,
+    });
+    return result.data?.item;
+  }
+
+  async commentOnItem(slug, commenBody, callingUser) {
+    const result = await this.#apiCall({
+      method: Method.POST,
+      url: `/api/items/${slug}/comments`,
+      callingUser,
+      data: { comment: { body: commenBody } },
+    });
+    return result.data?.comment;
+  }
+
+  async deleteComment(slug, commentId, callingUser) {
+    await this.#apiCall({
+      method: Method.DELETE,
+      url: `/api/items/${slug}/comments/${commentId}`,
+      callingUser,
+    });
+  }
+
+  async getComments(slug) {
+    const result = await this.#apiCall({ url: `/api/items/${slug}/comments` });
+    return result.data?.comments;
+  }
+
+  async followUser(username, callingUser) {
+    const result = await this.#apiCall({
+      method: Method.POST,
+      url: `/api/profiles/${username}/follow`,
+      callingUser,
+    });
+    return result.data?.profile;
+  }
+
+  async unfollowUser(username, callingUser) {
+    const result = await this.#apiCall({
+      method: Method.DELETE,
+      url: `/api/profiles/${username}/follow`,
+      callingUser,
+    });
+    return result.data?.profile;
+  }
+
+  async getProfile(username, callingUser) {
+    const result = await this.#apiCall({ url: `/api/profiles/${username}`, callingUser });
+    return result.data?.profile;
   }
 }
 

@@ -28,8 +28,7 @@ describe("Users Route", () => {
       const user = randomUserInfo();
       const createdUser = await anythinkClient.createUser(user);
 
-      anythinkClient.setToken(createdUser.token);
-      const retreivedUser = await anythinkClient.getUser();
+      const retreivedUser = await anythinkClient.getUser(createdUser);
 
       expect(retreivedUser.email).toEqual(user.email);
     });
@@ -72,8 +71,7 @@ describe("Users Route", () => {
 
       expect(loggedInUser.token).toBeDefined();
 
-      anythinkClient.setToken(loggedInUser.token);
-      const retreivedUser = await anythinkClient.getUser();
+      const retreivedUser = await anythinkClient.getUser(loggedInUser);
 
       expect(retreivedUser.email).toEqual(user.email);
     });
@@ -93,7 +91,6 @@ describe("Users Route", () => {
     let user;
     beforeEach(async () => {
       user = await anythinkClient.createUser(randomUserInfo());
-      anythinkClient.setToken(user.token);
     });
 
     test("Can update user's username", async () => {
@@ -133,7 +130,7 @@ describe("Users Route", () => {
     test("can update user's password", async () => {
       const newPassword = randomString();
 
-      await anythinkClient.updateUser({ password: newPassword });
+      await anythinkClient.updateUser({ password: newPassword }, user);
       const loggedInUser = await anythinkClient.loginUser(
         user.email,
         newPassword
@@ -142,8 +139,7 @@ describe("Users Route", () => {
     });
 
     const updateUserAndValidate = async (info) => {
-      const updateUserResult = await anythinkClient.updateUser(info);
-      anythinkClient.setToken(updateUserResult.token);
+      const updateUserResult = await anythinkClient.updateUser(info, user);
 
       expect(updateUserResult).toEqual(
         expect.objectContaining({
@@ -153,7 +149,7 @@ describe("Users Route", () => {
         })
       );
 
-      const retreivedUser = await anythinkClient.getUser();
+      const retreivedUser = await anythinkClient.getUser(updateUserResult);
       const keysToCompare = ["username", "email", ...Object.keys(info)];
       expect(pick(retreivedUser, keysToCompare)).toEqual(
         pick(updateUserResult, keysToCompare)

@@ -11,32 +11,35 @@ beforeAll(async () => {
 describe("Profiles Route", () => {
   let user;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     user = await anythinkClient.createUser(randomUserInfo());
-
-    await anythinkClient.setToken(user.token);
   });
 
   test("User marked as not following by default", async () => {
     const otherUser = await anythinkClient.createUser(randomUserInfo());
 
-    const newUserProfile = await anythinkClient.getProfile(otherUser.username);
+    const newUserProfile = await anythinkClient.getProfile(
+      otherUser.username,
+      user
+    );
     expect(newUserProfile.following).toBe(false);
   });
 
   test("Can follow and unfollow other users", async () => {
     const otherUser = await anythinkClient.createUser(randomUserInfo());
 
-    await anythinkClient.followUser(otherUser.username);
+    await anythinkClient.followUser(otherUser.username, user);
 
     const followedUserProfile = await anythinkClient.getProfile(
-      otherUser.username
+      otherUser.username,
+      user
     );
     expect(followedUserProfile.following).toBe(true);
 
-    await anythinkClient.unfollowUser(otherUser.username);
+    await anythinkClient.unfollowUser(otherUser.username, user);
     const unfollowedUserProfile = await anythinkClient.getProfile(
-      otherUser.username
+      otherUser.username,
+      user
     );
     expect(unfollowedUserProfile.following).toBe(false);
   });
@@ -49,13 +52,13 @@ describe("Profiles Route", () => {
 
   test("Receive error when trying to follow non existing user", async () => {
     await expect(
-      anythinkClient.followUser("non-existing-user")
+      anythinkClient.followUser("non-existing-user", user)
     ).rejects.toThrow();
   });
 
   test("Receives error when trying to unfollow non existing user", async () => {
     await expect(
-      anythinkClient.unfollowUser("non-existing-user")
+      anythinkClient.unfollowUser("non-existing-user", user)
     ).rejects.toThrow();
   });
 });

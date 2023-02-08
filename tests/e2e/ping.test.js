@@ -4,7 +4,7 @@ const { execAndWaitForEvent } = require("./wilcoEngine/utils");
 
 let anythinkClient;
 
-beforeAll(async () => {
+beforeEach(async () => {
   anythinkClient = new AnythinkClient();
 });
 

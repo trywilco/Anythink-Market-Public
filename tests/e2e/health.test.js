@@ -3,7 +3,7 @@ const { AnythinkClient } = require("./anytinkClient");
 
 let anythinkClient;
 
-beforeAll(async () => {
+beforeEach(async () => {
   anythinkClient = new AnythinkClient();
 });
 
