@@ -146,6 +146,44 @@ class AnythinkClient {
     return result.data?.comments;
   }
 
+  async getUserItems(seller, limit, offset, favorited, tag, callingUser) {
+    let url = `/api/items?seller=${seller}`;
+
+    if (limit) {
+      url += `&limit=${limit}`;
+    }
+
+    if (offset) {
+      url += `&offset=${offset}`;
+    }
+
+    if (favorited) {
+      url += `&favorited=${favorited}`;
+    }
+
+    if (tag) {
+      url += `&tag=${tag}`;
+    }
+
+    const result = await this.#apiCall({ url, callingUser });
+    return result.data?.items;
+  }
+
+  async getFeed(callingUser, limit, offset) {
+    let url = "/api/items/feed?";
+
+    if (limit) {
+      url += `&limit=${limit}`;
+    }
+
+    if (offset) {
+      url += `&offset=${offset}`;
+    }
+
+    const result = await this.#apiCall({ url, callingUser });
+    return result.data?.items;
+  }
+
   async followUser(username, callingUser) {
     const result = await this.#apiCall({
       method: Method.POST,
@@ -165,8 +203,16 @@ class AnythinkClient {
   }
 
   async getProfile(username, callingUser) {
-    const result = await this.#apiCall({ url: `/api/profiles/${username}`, callingUser });
+    const result = await this.#apiCall({
+      url: `/api/profiles/${username}`,
+      callingUser,
+    });
     return result.data?.profile;
+  }
+
+  async getTags() {
+    const result = await this.#apiCall({ url: "/api/tags" });
+    return result.data?.tags;
   }
 }
 

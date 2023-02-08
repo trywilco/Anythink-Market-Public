@@ -1,4 +1,10 @@
-const { beforeAll, expect, describe, beforeEach } = require("@jest/globals");
+const {
+  beforeAll,
+  expect,
+  describe,
+  beforeEach,
+  test,
+} = require("@jest/globals");
 const { AnythinkClient } = require("./anytinkClient");
 const {
   randomItemInfo,
@@ -223,6 +229,18 @@ describe("Items Route", () => {
       const itemAfterSecondUnfavorite = await anythinkClient.getItem(item.slug);
       expect(itemAfterSecondUnfavorite.favoritesCount).toBe(0);
     });
+
+    test("Unable to favorite an item without a logged in user", async () => {
+      const item = await anythinkClient.createItem(randomItemInfo(), user);
+
+      await expect(anythinkClient.favoriteItem(item.slug)).rejects.toThrow();
+    });
+
+    test("Unable to unfavorite an item without a logged in user", async () => {
+      const item = await anythinkClient.createItem(randomItemInfo(), user);
+
+      await expect(anythinkClient.unfavoriteItem(item.slug)).rejects.toThrow();
+    });
   });
 
   describe("Comment on Item", () => {
@@ -242,6 +260,14 @@ describe("Items Route", () => {
 
       const itemsComments = await anythinkClient.getComments(item.slug);
       expect(itemsComments).toHaveLength(2);
+    });
+
+    test("Can't comment on an item without a logged in user", async () => {
+      const item = await anythinkClient.createItem(randomItemInfo(), user);
+
+      await expect(
+        anythinkClient.commentOnItem(item.slug, "Comment")
+      ).rejects.toThrow();
     });
 
     test("Comments are retreived in reversed order", async () => {
@@ -313,4 +339,245 @@ describe("Items Route", () => {
       return comments;
     };
   });
+
+  describe("Get User's feed", () => {
+    let user;
+    let followedUserA;
+    let followedUserB;
+    let unfollowedUser;
+
+    let followedUserAItems;
+    let followedUserBItems;
+    let unfollowedUserItems;
+
+    beforeEach(async () => {
+      user = await anythinkClient.createUser(randomUserInfo());
+      followedUserA = await anythinkClient.createUser(randomUserInfo());
+      followedUserB = await anythinkClient.createUser(randomUserInfo());
+      unfollowedUser = await anythinkClient.createUser(randomUserInfo());
+
+      followedUserAItems = await createItems(followedUserA, 7);
+      followedUserBItems = await createItems(followedUserB, 12);
+      unfollowedUserItems = await createItems(unfollowedUser, 5);
+
+      await anythinkClient.followUser(followedUserA.username, user);
+      await anythinkClient.followUser(followedUserB.username, user);
+    });
+
+    test("User's feed contains only items by followed users", async () => {
+      const feed = await anythinkClient.getFeed(user);
+      expect(feed).toHaveLength(19);
+
+      const followedUserItemsInFeed = feed.filter(
+        (item) => item.seller.username === followedUserA.username
+      );
+      expect(followedUserItemsInFeed).toHaveLength(7);
+
+      const followedUserBItemsInFeed = feed.filter(
+        (item) => item.seller.username === followedUserB.username
+      );
+
+      expect(followedUserBItemsInFeed).toHaveLength(12);
+
+      const unfollowedUserItemsInFeed = feed.filter(
+        (item) => item.seller.username === unfollowedUser.username
+      );
+      expect(unfollowedUserItemsInFeed).toHaveLength(0);
+    });
+
+    test("Item's seller in feed always marked as followed", async () => {
+      const feed = await anythinkClient.getFeed(user);
+      expect(feed.every((item) => item.seller.following)).toBe(true);
+    });
+
+    test("Can limit number of returned items", async () => {
+      const feed = await anythinkClient.getFeed(user, 9);
+      expect(feed).toHaveLength(9);
+
+      const feedSlugs = feed.map((item) => item.slug);
+      const expectedSlugs = [
+        ...followedUserAItems.slice(0, 7),
+        ...followedUserBItems.slice(0, 2),
+      ].map((item) => item.slug);
+      expect(feedSlugs).toEqual(expectedSlugs);
+    });
+
+    test("Can offset number of returned items", async () => {
+      const feed = await anythinkClient.getFeed(user, null, 5);
+      expect(feed).toHaveLength(14);
+
+      const feedSlugs = feed.map((item) => item.slug);
+      const expectedSlugs = [
+        ...followedUserAItems.slice(5, 7),
+        ...followedUserBItems,
+      ].map((item) => item.slug);
+      expect(feedSlugs).toEqual(expectedSlugs);
+    });
+
+    test("Can limit and offset number of returned items", async () => {
+      const feed = await anythinkClient.getFeed(user, 5, 5);
+      expect(feed).toHaveLength(5);
+
+      const feedSlugs = feed.map((item) => item.slug);
+      const expectedSlugs = [
+        ...followedUserAItems.slice(5, 7),
+        ...followedUserBItems.slice(0, 3),
+      ].map((item) => item.slug);
+      expect(feedSlugs).toEqual(expectedSlugs);
+    });
+
+    test("Can't get feed without a logged in user", async () => {
+      await expect(anythinkClient.getFeed()).rejects.toThrow();
+    });
+  });
+
+  describe("Get User's items", () => {
+    let user;
+    let followedUser;
+    let unfollowedUser;
+
+    let followedUserItems;
+    let unfollowedUserBItems;
+
+    beforeEach(async () => {
+      user = await anythinkClient.createUser(randomUserInfo());
+      followedUser = await anythinkClient.createUser(randomUserInfo());
+      unfollowedUser = await anythinkClient.createUser(randomUserInfo());
+
+      followedUserItems = await createItems(followedUser, 12);
+      unfollowedUserBItems = await createItems(unfollowedUser, 17);
+
+      await anythinkClient.followUser(followedUser.username, user);
+    });
+
+    test("Can get followed user's items", async () => {
+      const userItems = await anythinkClient.getUserItems(
+        followedUser.username
+      );
+      expect(userItems).toMatchObject(followedUserItems.reverse());
+    });
+
+    test("Can get unfollowed user's items", async () => {
+      const userItems = await anythinkClient.getUserItems(
+        unfollowedUser.username
+      );
+      expect(userItems).toMatchObject(unfollowedUserBItems.reverse());
+    });
+
+    test("Item's seller is marked as followed if seller if followed", async () => {
+      const userItems = await anythinkClient.getUserItems(
+        followedUser.username,
+        null,
+        null,
+        null,
+        null,
+        user
+      );
+
+      for (const item of userItems) {
+        expect(item.seller.following).toBe(true);
+      }
+    });
+
+    test("Item's seller is marked as not followed if seller if not followed", async () => {
+      const userItems = await anythinkClient.getUserItems(
+        unfollowedUser.username,
+        null,
+        null,
+        null,
+        null,
+        user
+      );
+
+      for (const item of userItems) {
+        expect(item.seller.following).toBe(false);
+      }
+    });
+
+    test("Can limit number of returned items", async () => {
+      const userItems = await anythinkClient.getUserItems(
+        followedUser.username,
+        4
+      );
+      expect(userItems).toMatchObject(followedUserItems.reverse().slice(0, 4));
+    });
+
+    test("Can offset returned items", async () => {
+      const userItems = await anythinkClient.getUserItems(
+        followedUser.username,
+        null,
+        2
+      );
+      expect(userItems).toMatchObject(followedUserItems.reverse().slice(2));
+    });
+
+    test("Can limit and offset returned items", async () => {
+      const userItems = await anythinkClient.getUserItems(
+        followedUser.username,
+        3,
+        2
+      );
+      expect(userItems).toMatchObject(followedUserItems.reverse().slice(2, 5));
+    });
+
+    test("Can get only favorited items", async () => {
+      const itemsToFavorite = [
+        followedUserItems[2],
+        followedUserItems[5],
+        followedUserItems[10],
+      ];
+
+      for (const item of itemsToFavorite) {
+        await anythinkClient.favoriteItem(item.slug, user);
+      }
+
+      const favoritedItems = await anythinkClient.getUserItems(
+        followedUser.username,
+        null,
+        null,
+        user.username
+      );
+
+      expect(favoritedItems).toHaveLength(3);
+
+      expect(favoritedItems[0].title).toBe(itemsToFavorite[2].title);
+      expect(favoritedItems[1].title).toBe(itemsToFavorite[1].title);
+      expect(favoritedItems[2].title).toBe(itemsToFavorite[0].title);
+    });
+
+    test("Can combine all filters", async () => {
+      const itemsToFavorite = [
+        followedUserItems[1],
+        followedUserItems[4],
+        followedUserItems[9],
+      ];
+
+      for (const item of itemsToFavorite) {
+        await anythinkClient.favoriteItem(item.slug, user);
+      }
+
+      const favoritedItems = await anythinkClient.getUserItems(
+        followedUser.username,
+        2,
+        1,
+        user.username
+      );
+
+      expect(favoritedItems).toHaveLength(2);
+
+      expect(favoritedItems[0].title).toBe(itemsToFavorite[1].title);
+      expect(favoritedItems[1].title).toBe(itemsToFavorite[0].title);
+    });
+  });
+
+  const createItems = async (user, count) => {
+    let items = [];
+
+    for (let i = 0; i < count; i++) {
+      const item = await anythinkClient.createItem(randomItemInfo(), user);
+      items.push(item);
+    }
+
+    return items;
+  };
 });
