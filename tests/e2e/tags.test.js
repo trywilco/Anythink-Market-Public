@@ -17,8 +17,14 @@ describe("Tags Route", () => {
   });
 
   test("Returned tags list contains tags for added items", async () => {
+    const numItemsForTag = 3;
     for (const tag of tags) {
-      await anythinkClient.createItem(randomItemInfo({ tagList: [tag] }), user);
+      for (let i = 0; i < numItemsForTag; i++) {
+        await anythinkClient.createItem(
+          randomItemInfo({ tagList: [tag] }),
+          user
+        );
+      }
     }
 
     const returnedTags = await anythinkClient.getTags();
