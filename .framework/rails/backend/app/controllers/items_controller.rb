@@ -45,7 +45,7 @@ class ItemsController < ApplicationController
 
     @items_count = @items.count
 
-    @items = @items.offset(params[:offset] || 0).limit(params[:limit] || 20)
+    @items = @items.order(created_at: :asc).offset(params[:offset] || 0).limit(params[:limit] || 20)
 
     render :index
   end
