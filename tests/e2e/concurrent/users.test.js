@@ -1,8 +1,7 @@
 require("dotenv").config();
 const { test, describe, beforeEach, expect } = require("@jest/globals");
-const { AnythinkClient } = require("./anytinkClient");
-const { randomUserInfo, randomString, randomImageUrl } = require("./utils");
-const { execAndWaitForEvent } = require("./wilcoEngine/utils");
+const { AnythinkClient } = require("../anytinkClient");
+const { randomUserInfo, randomString, randomImageUrl } = require("../utils");
 const { pick } = require("lodash");
 
 let anythinkClient;
@@ -31,12 +30,6 @@ describe("Users Route", () => {
       const retreivedUser = await anythinkClient.getUser(createdUser);
 
       expect(retreivedUser.email).toEqual(user.email);
-    });
-
-    test("Creating a user sends event to the Wilco Engine", async () => {
-      await execAndWaitForEvent("user_created", async () => {
-        await anythinkClient.createUser(randomUserInfo());
-      });
     });
 
     test("can't create user without username", async () => {

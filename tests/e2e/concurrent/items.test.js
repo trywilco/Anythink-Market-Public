@@ -5,14 +5,13 @@ const {
   beforeEach,
   test,
 } = require("@jest/globals");
-const { AnythinkClient } = require("./anytinkClient");
+const { AnythinkClient } = require("../anytinkClient");
 const {
   randomItemInfo,
   randomUserInfo,
   randomImageUrl,
   randomString,
-} = require("./utils");
-const { execAndWaitForEvent } = require("./wilcoEngine/utils");
+} = require("../utils");
 
 let anythinkClient;
 
@@ -66,12 +65,6 @@ describe("Items Route", () => {
       );
       expect(createdItem.tagList).toStrictEqual([]);
       expect(createdItem.slug).toBeDefined();
-    });
-
-    test("Creating item sends item_created event to the Wilco Engine", async () => {
-      await execAndWaitForEvent("item_created", async () => {
-        await anythinkClient.createItem(randomItemInfo(), user);
-      });
     });
   });
 

@@ -1,5 +1,5 @@
-const { AnythinkClient } = require("./anytinkClient");
-const { randomString, randomItemInfo, randomUserInfo } = require("./utils");
+const { AnythinkClient } = require("../anytinkClient");
+const { randomString, randomItemInfo, randomUserInfo } = require("../utils");
 
 let anythinkClient;
 
