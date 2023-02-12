@@ -48,12 +48,8 @@ jobs:
         run: yarn install
         working-directory: tests/frontend
 
-      - name: Install playwright
-        run: yarn add playwright
-        working-directory: tests/frontend
-
-#      - name: Install playwright chrome
-#        run: yarn playwright install-deps chromium
+#      - name: Install playwright
+#        run: yarn add playwright
 #        working-directory: tests/frontend
 
       - name: Run Playwright tests
