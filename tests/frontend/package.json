@@ -5,7 +5,8 @@
   "license": "MIT",
   "dependencies": {
     "@playwright/test": "^1.30.0",
-    "playwright": "^1.30.0"
+    "playwright": "^1.30.0",
+    "uid": "^2.0.1"
   },
   "scripts": {
     "test": "playwright test"
