@@ -1,9 +1,7 @@
 name: Playwright Tests
 on:
-  push:
-    branches: [ main, master ]
   pull_request:
-    branches: [ main, master ]
+
 jobs:
   test:
     timeout-minutes: 6
@@ -25,7 +23,7 @@ jobs:
         working-directory: .framework/react/frontend
 
       - name: Run frontend client
-        run:  WILCO_ID=0 REACT_APP_BACKEND_URL=http://localhost:3000 PORT=3001 yarn start >& /dev/null &
+        run:  WILCO_ID=0 REACT_APP_BACKEND_URL=http://localhost:3001 yarn start >& /dev/null &
         working-directory: .framework/react/frontend
 
       - name: Install test deps
@@ -35,10 +33,3 @@ jobs:
       - name: Run Playwright tests
         run: yarn test
         working-directory: tests/frontend
-
-      - uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 30

@@ -9,6 +9,6 @@
     "uid": "^2.0.1"
   },
   "scripts": {
-    "test": "playwright test"
+    "test": "playwright test --config=playwright.config.js"
   }
 }
