@@ -5,10 +5,13 @@
   "license": "MIT",
   "dependencies": {
     "@playwright/test": "^1.30.0",
+    "eslint": "^8.34.0",
     "playwright": "^1.30.0",
+    "prettier": "^2.8.4",
     "uid": "^2.0.1"
   },
   "scripts": {
-    "test": "playwright test --config=playwright.config.js"
+    "test": "playwright test --config=playwright.config.js",
+    "format": "yarn prettier --write ."
   }
 }
