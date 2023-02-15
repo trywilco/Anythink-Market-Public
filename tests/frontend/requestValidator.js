@@ -26,34 +26,59 @@ const wrapWithRequestId = (func) => {
 };
 
 const execAndWaitForRequest = async (eventId, func, maxTime = 500) => {
-  let eventReceived = false;
+  let eventPromise;
   const eventCallback = () => {
-    eventReceived = true;
+    eventPromise(`The event ${eventId} was sent to Wilco`);
   };
 
-  subscribe(eventId, eventCallback);
-
-  await func();
-
-  const start = Date.now();
-
-  while (Date.now() - start < maxTime) {
-    if (eventReceived) {
-      console.log(`The event ${eventId} was sent to Wilco`);
-      break;
-    }
-
-    await sleep(100);
-  }
-
-  unsubscribe(eventId, eventCallback);
+  const subscribePromise = new Promise(async (resolve) => {
+    subscribe(eventId, eventCallback);
+    eventPromise = resolve;
+    await func();
+  });
 
   try {
-    expect(eventReceived).toBe(true);
+    const result = await Promise.race([
+      new Promise((resolve) => setTimeout(resolve, maxTime)),
+      subscribePromise,
+    ]);
+    expect(result).toBe(`The event ${eventId} was sent to Wilco`);
   } catch {
     throw new Error(`The event ${eventId} was not sent to Wilco`);
+  } finally {
+    unsubscribe(eventId, eventCallback);
   }
 };
+//
+// const execAndWaitForRequest = async (eventId, func, maxTime = 500) => {
+//   let eventReceived = false;
+//   const eventCallback = () => {
+//     eventReceived = true;
+//   };
+//
+//   subscribe(eventId, eventCallback);
+//
+//   await func();
+//
+//   const start = Date.now();
+//
+//   while (Date.now() - start < maxTime) {
+//     if (eventReceived) {
+//       console.log(`The event ${eventId} was sent to Wilco`);
+//       break;
+//     }
+//
+//     await sleep(100);
+//   }
+//
+//   unsubscribe(eventId, eventCallback);
+//
+//   try {
+//     expect(eventReceived).toBe(true);
+//   } catch {
+//     throw new Error(`The event ${eventId} was not sent to Wilco`);
+//   }
+// };
 
 module.exports = {
   dispatch,
