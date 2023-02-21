@@ -25,14 +25,22 @@ const wrapWithRequestId = (func) => {
   };
 };
 
-const execAndWaitForRequest = async (eventId, func, maxTime = 500) => {
+const listenAndTriggerRequest = async (
+  requestListenerCallback,
+  requestTrigger
+) => {
+  const requestId = await requestListenerCallback();
+  await triggerAndWaitForRequest(requestId, requestTrigger);
+};
+
+const triggerAndWaitForRequest = async (requestId, func, maxTime = 500) => {
   let eventPromise;
   const eventCallback = () => {
-    eventPromise(`The event ${eventId} was sent to Wilco`);
+    eventPromise(`The event ${requestId} was sent to Wilco`);
   };
 
-  const subscribePromise = new Promise(async (resolve) => {
-    subscribe(eventId, eventCallback);
+  const subscribePromiseAndExec = new Promise(async (resolve) => {
+    subscribe(requestId, eventCallback);
     eventPromise = resolve;
     await func();
   });
@@ -40,13 +48,13 @@ const execAndWaitForRequest = async (eventId, func, maxTime = 500) => {
   try {
     const result = await Promise.race([
       new Promise((resolve) => setTimeout(resolve, maxTime)),
-      subscribePromise,
+      subscribePromiseAndExec,
     ]);
-    expect(result).toBe(`The event ${eventId} was sent to Wilco`);
+    expect(result).toBe(`The event ${requestId} was sent to Wilco`);
   } catch {
-    throw new Error(`The event ${eventId} was not sent to Wilco`);
+    throw new Error(`The event ${requestId} was not sent to Wilco`);
   } finally {
-    unsubscribe(eventId, eventCallback);
+    unsubscribe(requestId, eventCallback);
   }
 };
 
@@ -55,5 +63,6 @@ module.exports = {
   subscribe,
   unsubscribe,
   wrapWithRequestId,
-  execAndWaitForRequest,
+  listenAndTriggerRequest,
+  triggerAndWaitForRequest,
 };
