@@ -50,6 +50,13 @@ jobs:
         run: ENGINE_BASE_URL=http://localhost:3003 WILCO_ID=0 SECRET_KEY=secret DATABASE_URL=postgresql://postgres:postgres@localhost/anythink-market  gunicorn app.main:app --worker-class=uvicorn.workers.UvicornWorker --bind=0.0.0.0:3000 --workers=5 >& /dev/null &
         working-directory: .framework/python/backend
 
+      - name: Run checks
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+          cache: "yarn"
+          cache-dependency-path: .framework/node/backend
+
       - run: yarn install
         working-directory: tests/e2e/
 
