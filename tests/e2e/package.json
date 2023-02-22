@@ -7,7 +7,7 @@
     "node": "16"
   },
   "scripts": {
-    "test": "yarn jest -c jest.concurrent.config.js --maxWorkers=100%",
+    "test": "yarn jest -c jest.sequential.config.js --maxWorkers=1 && yarn jest -c jest.concurrent.config.js --maxWorkers=100%",
     "format": "yarn prettier --write .",
     "lint": "yarn eslint . && yarn prettier -c ."
   },
