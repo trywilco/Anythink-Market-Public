@@ -266,7 +266,7 @@ class ItemsRepository(BaseRepository):  # noqa: WPS214
             self.connection,
             slug=slug,
         )
-        return [row["tag"] for row in tag_rows]
+        return sorted([row["tag"] for row in tag_rows])
 
     async def get_favorites_count_for_item_by_slug(self, *, slug: str) -> int:
         return (
