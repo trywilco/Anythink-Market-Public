@@ -43,6 +43,13 @@ jobs:
       - run: ENGINE_BASE_URL=http://localhost:3003 WILCO_ID=0 DATABASE_URL=postgresql://postgres:postgres@localhost/anythink-market bin/rails s >& /dev/null &
         working-directory: .framework/rails/backend
 
+      - name: Run checks
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+          cache: "yarn"
+          cache-dependency-path: tests/e2e/
+
       - run: yarn install
         working-directory: tests/e2e/
 
