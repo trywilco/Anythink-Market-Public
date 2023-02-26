@@ -56,13 +56,13 @@ jobs:
         with:
           node-version: "16"
           cache: "yarn"
-          cache-dependency-path: tests/e2e/
+          cache-dependency-path: tests/e2e/yarn.lock
 
       - run: yarn install
         working-directory: tests/e2e/
 
       - run: yarn wait-on -v http-get://0.0.0.0:3000/health --timeout 5000
-        working-directory: tests/e2e/yarn.lock
+        working-directory: tests/e2e/
 
       - run: yarn test
         working-directory: tests/e2e/
