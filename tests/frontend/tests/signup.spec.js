@@ -14,7 +14,7 @@ const password = `pass${(Math.random() + 1).toString(36).substring(7)}`;
 const token =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZWE2MjAxZjg3MjE1OGMzMTE1YWI0ZSIsInVzZXJuYW1lIjoidXNlcjJ3d3FlIiwiZXhwIjoxNjgxNDg1Mjk3LCJpYXQiOjE2NzYzMDQ4OTd9.Z45FqelGgXLU4q6xkhw_fTHZ5GXoVsx0vI_HoI3ccDo";
 
-const listenAndExpectCreateUser = (page, username, email, password) => {
+const wrapExpectCreateUser = (page, username, email, password) => {
   return wrapWithRequestId((requestId) => {
     page.on("request", (request) => {
       if (
@@ -94,7 +94,7 @@ test("Creating a user triggers a request", async ({ page }) => {
   await page.getByPlaceholder("Password").fill(password);
   await page.getByPlaceholder("Email").fill(email);
   await listenAndTriggerRequest(
-    async () => listenAndExpectCreateUser(page, username, email, password),
+    async () => wrapExpectCreateUser(page, username, email, password),
     async () => await page.getByRole("button", { name: "SIGN UP" }).click()
   );
 });

@@ -29,7 +29,7 @@ const item = {
     },
   },
 };
-const listenAndExpectCreateItem = (page, title, description, image) => {
+const wrapExpectCreateItem = (page, title, description, image) => {
   return wrapWithRequestId((requestId) => {
     page.on("request", (request) => {
       if (
@@ -64,7 +64,7 @@ test("Creating an item trigger a request", async ({ page }) => {
   await page.getByPlaceholder("What's this item about?").fill(description);
   await page.getByPlaceholder("Image url").fill(imageUrl);
   await listenAndTriggerRequest(
-    async () => listenAndExpectCreateItem(page, title, description, imageUrl),
+    async () => wrapExpectCreateItem(page, title, description, imageUrl),
     async () => await page.getByRole("button", { name: "Publish Item" }).click()
   );
 });
