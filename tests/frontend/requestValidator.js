@@ -30,10 +30,10 @@ const listenAndTriggerRequest = async (
   requestTrigger
 ) => {
   const requestId = await requestListenerCallback();
-  await triggerAndWaitForRequest(requestId, requestTrigger);
+  await execAndWaitForRequest(requestId, requestTrigger);
 };
 
-const triggerAndWaitForRequest = async (requestId, func, maxTime = 500) => {
+const execAndWaitForRequest = async (requestId, func, maxTime = 500) => {
   let eventPromise;
   const eventCallback = () => {
     eventPromise(`The event ${requestId} was sent to Wilco`);
@@ -64,5 +64,5 @@ module.exports = {
   unsubscribe,
   wrapWithRequestId,
   listenAndTriggerRequest,
-  triggerAndWaitForRequest,
+  execAndWaitForRequest,
 };

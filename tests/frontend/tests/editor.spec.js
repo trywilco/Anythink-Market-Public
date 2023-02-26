@@ -2,7 +2,6 @@ import { expect, test } from "@playwright/test";
 
 import {
   dispatch,
-  triggerAndWaitForRequest,
   listenAndTriggerRequest,
   wrapWithRequestId,
 } from "../requestValidator";
