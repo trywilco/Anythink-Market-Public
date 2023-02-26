@@ -31,6 +31,7 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.9.13"
+          cache: 'pip'
 
       - uses: oNaiPs/secrets-to-env-action@v1
         with:
@@ -49,6 +50,13 @@ jobs:
       - name: Run python server
         run: ENGINE_BASE_URL=http://localhost:3003 WILCO_ID=0 SECRET_KEY=secret DATABASE_URL=postgresql://postgres:postgres@localhost/anythink-market  gunicorn app.main:app --worker-class=uvicorn.workers.UvicornWorker --bind=0.0.0.0:3000 --workers=5 >& /dev/null &
         working-directory: .framework/python/backend
+
+      - name: Run checks
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+          cache: "yarn"
+          cache-dependency-path: tests/e2e/yarn.lock
 
       - run: yarn install
         working-directory: tests/e2e/
