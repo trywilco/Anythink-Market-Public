@@ -62,7 +62,7 @@ jobs:
         working-directory: tests/e2e/
 
       - run: yarn wait-on -v http-get://0.0.0.0:3000/health --timeout 5000
-        working-directory: tests/e2e/
+        working-directory: tests/e2e/yarn.lock
 
       - run: yarn test
         working-directory: tests/e2e/
