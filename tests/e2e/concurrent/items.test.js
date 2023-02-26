@@ -153,7 +153,7 @@ describe("Items Route", () => {
         user
       );
       expect(
-          matchObjects(updatedItemResult, {
+        matchObjects(updatedItemResult, {
           ...origItemInfo,
           ...updateInfo,
         })
