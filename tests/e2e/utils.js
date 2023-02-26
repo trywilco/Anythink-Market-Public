@@ -44,7 +44,7 @@ function randomItemInfo(info = null) {
     title: randomString(),
     description: randomString(),
     image: randomImageUrl(),
-    tagList: [randomString(), randomString()].sort(),
+    tagList: [randomString(), randomString()],
     ...info,
   };
 }
