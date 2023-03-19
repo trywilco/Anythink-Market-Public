@@ -37,7 +37,7 @@ const Home = ({onLoad, onUnload, tags, onClickTag}) => {
       Promise.all([agent.Tags.getAll(), itemsPromise()])
     );
     return onUnload;
-  }, []);
+  }, [onLoad, onUnload, tab, itemsPromise]);
 
     return (
       <div className="home-page">
