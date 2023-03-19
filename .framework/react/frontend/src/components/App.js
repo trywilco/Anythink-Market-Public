@@ -31,20 +31,22 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const App = (props) => {
+  const { redirectTo, onRedirect, onLoad } = props;
+
   useEffect(() => {
-    if (props.redirectTo) {
-      store.dispatch(push(props.redirectTo));
-      props.onRedirect();
+    if (redirectTo) {
+      store.dispatch(push(redirectTo));
+      onRedirect();
     }
-  }, [props.redirectTo]);
+  }, [redirectTo, onRedirect]);
 
   useEffect(() => {
     const token = window.localStorage.getItem("jwt");
     if (token) {
       agent.setToken(token);
     }
-    props.onLoad(token ? agent.Auth.current() : null, token);
-  }, [props.onLoad]);
+    onLoad(token ? agent.Auth.current() : null, token);
+  }, [onLoad]);
 
   if (props.appLoaded) {
     return (
