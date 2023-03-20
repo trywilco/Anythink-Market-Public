@@ -28,7 +28,6 @@ const mapDispatchToProps = (dispatch) => ({
   onRedirect: () => dispatch({ type: REDIRECT }),
 });
 
-
 const App = (props) => {
   const { redirectTo, onRedirect, onLoad } = props;
   const navigate = useNavigate();
