@@ -2,6 +2,8 @@ name: E2E Python
 
 on:
   pull_request:
+    paths:
+      - ./framework/python/**
 
 jobs:
   ci-checks:
