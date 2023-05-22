@@ -2,8 +2,6 @@ name: E2E Node
 
 on:
   pull_request:
-    paths:
-      - ./framework/node/**
 
 jobs:
   ci-checks:
