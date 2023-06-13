@@ -38,7 +38,7 @@ const GlobalFeedTab = (props) => {
         className={props.tab === "all" ? "nav-link active" : "nav-link"}
         onClick={clickHandler}
       >
-        Global Feed
+        <span id="global-feed-nav">Global Feed</span>
       </button>
     </li>
   );
@@ -80,9 +80,9 @@ const MainView = (props) => {
             onTabClick={props.onTabClick}
           />
 
-          <GlobalFeedTab tab={props.tab} onTabClick={props.onTabClick} />
+          <GlobalFeedTab tab={props.tab} onTabClick={props.onTabClick}/>
 
-          <TagFilterTab tag={props.tag} />
+          <TagFilterTab tag={props.tag}/>
         </ul>
       </div>
 
