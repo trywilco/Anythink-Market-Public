@@ -38,9 +38,5 @@
     "workbench.welcomePage.walkthroughs.openOnInstall": false,
     "workbench.welcomePage.experimental.videoTutorials": "off",
     "github.codespaces.defaultExtensions": []
-    },
-  "features": {
-	  "ghcr.io/devcontainers/features/docker-in-docker:2": {}
   }
-  
 }
