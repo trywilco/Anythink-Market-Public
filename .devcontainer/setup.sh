@@ -3,6 +3,9 @@ ENGINE_EVENT_ENDPOINT="${ENGINE_BASE_URL}/users/${WILCO_ID}/event"
 CODESPACE_BACKEND_HOST="${CODESPACE_NAME}-3000.${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}"
 CODESPACE_BACKEND_URL="https://${CODESPACE_BACKEND_HOST}"
 
+# Make sure the Docker daemon is started
+/usr/local/share/docker-init.sh
+
 # Update engine that codespace started for user
 curl -L -X POST "${ENGINE_EVENT_ENDPOINT}" -H "Content-Type: application/json" --data-raw "{ \"event\": \"github_codespace_started\" }"
 
