@@ -26,3 +26,4 @@ for port in "${TARGET_PORTS[@]}"; do
             echo "Failed to make port $port public after $RETRY_COUNT attempts."
         fi
     done
+done
