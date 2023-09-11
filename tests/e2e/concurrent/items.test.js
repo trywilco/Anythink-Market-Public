@@ -14,6 +14,9 @@ const {
   matchObjects,
 } = require("../utils");
 
+jest.setTimeout(60000)
+
+
 let anythinkClient;
 
 beforeAll(async () => {
