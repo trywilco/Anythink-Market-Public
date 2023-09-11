@@ -15,6 +15,7 @@ class UsersQueriesMixin:
     async def get_user_by_username(
         self, conn: Connection, *, username: str
     ) -> Record: ...
+    async def get_all_users(self, conn: Connection) -> Record:...
     async def create_new_user(
         self,
         conn: Connection,
@@ -22,7 +23,8 @@ class UsersQueriesMixin:
         username: str,
         email: str,
         salt: str,
-        hashed_password: str
+        hashed_password: str,
+        role: str
     ) -> Record: ...
     async def update_user_by_username(
         self,

@@ -7,10 +7,24 @@ SELECT id,
        bio,
        image,
        created_at,
-       updated_at
+       updated_at,
+       role
 FROM users
 WHERE email = :email
 LIMIT 1;
+
+-- name: get-all-users
+SELECT id,
+       username,
+       email,
+       bio,
+       image,
+       created_at,
+       updated_at,
+       role
+FROM users
+LIMIT 100;
+
 
 
 -- name: get-user-by-username^
@@ -22,15 +36,16 @@ SELECT id,
        bio,
        image,
        created_at,
-       updated_at
+       updated_at,
+       role
 FROM users
 WHERE username = :username
 LIMIT 1;
 
 
 -- name: create-new-user<!
-INSERT INTO users (username, email, salt, hashed_password)
-VALUES (:username, :email, :salt, :hashed_password)
+INSERT INTO users (username, email, salt, hashed_password, role)
+VALUES (:username, :email, :salt, :hashed_password, :role)
 RETURNING
     id, created_at, updated_at;
 

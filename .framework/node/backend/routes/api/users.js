@@ -5,9 +5,21 @@ var User = mongoose.model("User");
 var auth = require("../auth");
 const { sendEvent } = require("../../lib/event");
 
-router.get("/user", auth.required, function(req, res, next) {
+router.get("/users", auth.required, function (req, res, next) {
+  User.find()
+    .then(function (users) {
+      return res.json({
+        users: users.map(function (user) {
+          return user.toAuthJSON();
+        }),
+      });
+    })
+    .catch(next);
+});
+
+router.get("/user", auth.required, function (req, res, next) {
   User.findById(req.payload.id)
-    .then(function(user) {
+    .then(function (user) {
       if (!user) {
         return res.sendStatus(401);
       }
@@ -17,9 +29,9 @@ router.get("/user", auth.required, function(req, res, next) {
     .catch(next);
 });
 
-router.put("/user", auth.required, function(req, res, next) {
+router.put("/user", auth.required, function (req, res, next) {
   User.findById(req.payload.id)
-    .then(function(user) {
+    .then(function (user) {
       if (!user) {
         return res.sendStatus(401);
       }
@@ -41,14 +53,14 @@ router.put("/user", auth.required, function(req, res, next) {
         user.setPassword(req.body.user.password);
       }
 
-      return user.save().then(function() {
+      return user.save().then(function () {
         return res.json({ user: user.toAuthJSON() });
       });
     })
     .catch(next);
 });
 
-router.post("/users/login", function(req, res, next) {
+router.post("/users/login", function (req, res, next) {
   if (!req.body.user.email) {
     return res.status(422).json({ errors: { email: "can't be blank" } });
   }
@@ -57,21 +69,25 @@ router.post("/users/login", function(req, res, next) {
     return res.status(422).json({ errors: { password: "can't be blank" } });
   }
 
-  passport.authenticate("local", { session: false }, function(err, user, info) {
-    if (err) {
-      return next(err);
-    }
+  passport.authenticate(
+    "local",
+    { session: false },
+    function (err, user, info) {
+      if (err) {
+        return next(err);
+      }
 
-    if (user) {
-      user.token = user.generateJWT();
-      return res.json({ user: user.toAuthJSON() });
-    } else {
-      return res.status(422).json(info);
+      if (user) {
+        user.token = user.generateJWT();
+        return res.json({ user: user.toAuthJSON() });
+      } else {
+        return res.status(422).json(info);
+      }
     }
-  })(req, res, next);
+  )(req, res, next);
 });
 
-router.post("/users", function(req, res, next) {
+router.post("/users", function (req, res, next) {
   var user = new User();
 
   user.username = req.body.user.username;
@@ -80,8 +96,8 @@ router.post("/users", function(req, res, next) {
 
   user
     .save()
-    .then(function() {
-      sendEvent('user_created', { username: req.body.user.username })
+    .then(function () {
+      sendEvent("user_created", { username: req.body.user.username });
       return res.json({ user: user.toAuthJSON() });
     })
     .catch(next);

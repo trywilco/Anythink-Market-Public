@@ -16,6 +16,7 @@ USER_IS_ALREADY_FOLLOWED = "you follow this user already"
 
 WRONG_TOKEN_PREFIX = "unsupported authorization type"  # noqa: S105
 MALFORMED_PAYLOAD = "could not validate credentials"
+UNAUTHORIZED = "unauthorized user"
 
 ITEM_IS_ALREADY_FAVORITED = "you are already marked this items as favorite"
 ITEM_IS_NOT_FAVORITED = "item is not favorited"

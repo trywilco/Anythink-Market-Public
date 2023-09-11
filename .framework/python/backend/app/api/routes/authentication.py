@@ -1,6 +1,9 @@
+from typing import List, Dict
+
 from fastapi import APIRouter, Body, Depends, HTTPException
 from starlette.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 
+from app.models.domain.users import User
 from app.api.dependencies.database import get_repository
 from app.core.config import get_app_settings
 from app.core.settings.app import AppSettings
@@ -12,12 +15,22 @@ from app.models.schemas.users import (
     UserInResponse,
     UserWithToken,
 )
+from app.models.domain.users import User, UserRole
+
 from app.resources import strings
 from app.services import jwt
 from app.services.authentication import check_email_is_taken, check_username_is_taken
 from app.services.event import send_event
 
+
 router = APIRouter()
+
+@router.get("/", response_model=Dict[str, List[User]], name="users:get-all-users")
+async def retrieve_all_users(
+    users_repo: UsersRepository = Depends(get_repository(UsersRepository)),
+) -> Dict[str, List[User]]:
+    users = await users_repo.get_all_users()
+    return {"users": users}
 
 
 @router.post("/login", response_model=UserInResponse, name="auth:login")
@@ -50,6 +63,7 @@ async def login(
             bio=user.bio,
             image=user.image,
             token=token,
+            role=user.role
         ),
     )
 

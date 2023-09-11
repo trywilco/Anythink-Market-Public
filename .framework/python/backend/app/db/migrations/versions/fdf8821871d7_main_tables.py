@@ -60,6 +60,8 @@ def create_users_table() -> None:
         sa.Column("hashed_password", sa.Text),
         sa.Column("bio", sa.Text, nullable=False, server_default=""),
         sa.Column("image", sa.Text),
+        sa.Column("role", sa.Text, nullable=True),
+
         *timestamps(),
     )
     op.execute(
