@@ -10,7 +10,6 @@ from app.models.domain.items import Item
 from app.models.domain.comments import Comment
 from app.models.domain.users import User
 from app.resources import strings
-from app.services.comments import check_user_can_modify_comment
 
 
 async def get_comment_by_id_from_path(
@@ -36,12 +35,3 @@ async def get_comment_by_id_from_path(
         )
 
 
-def check_comment_modification_permissions(
-    comment: Comment = Depends(get_comment_by_id_from_path),
-    user: User = Depends(authentication.get_current_user_authorizer()),
-) -> None:
-    if not check_user_can_modify_comment(comment, user):
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail=strings.USER_IS_NOT_SELLER_OF_ITEM,
-        )
