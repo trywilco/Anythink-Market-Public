@@ -5,10 +5,7 @@ from starlette import status
 
 from app.api.dependencies.items import get_item_by_slug_from_path
 from app.api.dependencies.authentication import get_current_user_authorizer
-from app.api.dependencies.comments import (
-    check_comment_modification_permissions,
-    get_comment_by_id_from_path,
-)
+from app.api.dependencies.comments import get_comment_by_id_from_path
 from app.api.dependencies.database import get_repository
 from app.db.repositories.comments import CommentsRepository
 from app.models.domain.items import Item
@@ -61,7 +58,6 @@ async def create_comment_for_item(
     "/{comment_id}",
     status_code=status.HTTP_204_NO_CONTENT,
     name="comments:delete-comment-from-item",
-    dependencies=[Depends(check_comment_modification_permissions)],
     response_class=Response,
 )
 async def delete_comment_from_item(
