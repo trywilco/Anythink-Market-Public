@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="io.spring.infrastructure.mybatis.mapper.ItemMapper">
+    <insert id="insert">
+        insert into items(id, slug, title, description, image, seller_id, created_at, updated_at)
+        values(
+          #{item.id},
+          #{item.slug},
+          #{item.title},
+          #{item.description},
+          #{item.image},
+          #{item.sellerId},
+          #{item.createdAt},
+          #{item.updatedAt})
+    </insert>
+    <insert id="insertTag">
+        insert into tags (id, name) values (#{tag.id}, #{tag.name})
+    </insert>
+    <insert id="insertItemTagRelation">
+        insert into item_tags (item_id, tag_id) values(#{itemId}, #{tagId})
+    </insert>
+    <update id="update">
+        update items
+          <set>
+              <if test="item.title != ''">title = #{item.title},</if>
+              <if test="item.title != ''">slug = #{item.slug},</if>
+              <if test="item.description != ''">description = #{item.description},</if>
+              <if test="item.image != ''">image = #{item.image}</if>
+          </set>
+        where id = #{item.id}
+    </update>
+    <delete id="delete">
+        delete from items where id = #{id}
+    </delete>
+    <sql id="selectItem">
+        select
+        A.id itemId,
+        A.slug itemSlug,
+        A.title itemTitle,
+        A.description itemDescription,
+        A.image itemImage,
+        A.seller_id itemSellerId,
+        A.created_at itemCreatedAt,
+        A.updated_at itemUpdatedAt,
+        T.id tagId,
+        T.name tagName
+        from items A
+        left join item_tags AT on A.id = AT.item_id
+        left join tags T on T.id = AT.tag_id
+    </sql>
+
+    <select id="findById" resultMap="item">
+        <include refid="selectItem"/>
+        where A.id = #{id}
+    </select>
+
+    <select id="findTag" resultType="io.spring.core.item.Tag">
+        select id, name from tags where name = #{tagName}
+    </select>
+
+    <select id="findBySlug" resultMap="item">
+        <include refid="selectItem"/>
+        where A.slug = #{slug}
+    </select>
+
+    <resultMap id="item" type="io.spring.core.item.Item">
+        <id column="itemId" property="id"/>
+        <result column="itemSellerId" property="sellerId"/>
+        <result column="itemTitle" property="title"/>
+        <result column="itemSlug" property="slug"/>
+        <result column="itemDescription" property="description"/>
+        <result column="itemImage" property="image"/>
+        <result column="itemCreatedAt" property="createdAt"/>
+        <result column="itemUpdatedAt" property="updatedAt"/>
+        <collection property="tags" ofType="arraylist" resultMap="tag"/>
+    </resultMap>
+
+    <resultMap id="tag" type="io.spring.core.item.Tag">
+        <id column="tagId" property="id"/>
+        <result column="tagName" property="name"/>
+    </resultMap>
+</mapper>

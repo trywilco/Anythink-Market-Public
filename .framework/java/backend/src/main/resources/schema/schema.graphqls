@@ -1,0 +1,177 @@
+# Build the schema.
+type Query {
+    item(slug: String!): Item
+    items(
+        first: Int,
+        after: String,
+        last: Int,
+        before: String,
+        soldBy: String
+        favoritedBy: String
+        withTag: String
+    ): ItemsConnection
+    me: User
+    feed(first: Int, after: String, last: Int, before: String): ItemsConnection
+    profile(username: String!): ProfilePayload
+    tags: [String]
+}
+
+union UserResult = UserPayload | Error
+
+type Mutation {
+    ### User & Profile
+    createUser(input: CreateUserInput): UserResult
+    login(password: String!, email: String!): UserPayload
+    updateUser(changes: UpdateUserInput!): UserPayload
+    followUser(username: String!): ProfilePayload
+    unfollowUser(username: String!): ProfilePayload
+
+    ### Item
+    createItem(input: CreateItemInput!): ItemPayload
+    updateItem(slug: String!, changes: UpdateItemInput!): ItemPayload
+    favoriteItem(slug: String!): ItemPayload
+    unfavoriteItem(slug: String!): ItemPayload
+    deleteItem(slug: String!): DeletionStatus
+
+    ### Comment
+    addComment(slug: String!, body: String!): CommentPayload
+    deleteComment(slug: String!, id: ID!): DeletionStatus
+}
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+### Items
+type Item {
+    seller: Profile!
+    comments(first: Int, after: String, last: Int, before: String): CommentsConnection
+    createdAt: String!
+    description: String!
+    favorited: Boolean!
+    favoritesCount: Int!
+    image: String!
+    slug: String!
+    tagList: [String],
+    title: String!
+    updatedAt: String!
+}
+
+type ItemEdge {
+    cursor: String!
+    node: Item
+}
+
+type ItemsConnection {
+    edges: [ItemEdge]
+    pageInfo: PageInfo!
+}
+
+### Comments
+type Comment {
+    id: ID!
+    seller: Profile!
+    item: Item!
+    body: String!
+    createdAt: String!
+    updatedAt: String!
+}
+
+type CommentEdge {
+    cursor: String!
+    node: Comment
+}
+
+type CommentsConnection {
+    edges: [CommentEdge]
+    pageInfo: PageInfo!
+}
+
+type DeletionStatus {
+    success: Boolean!
+}
+
+type PageInfo {
+    endCursor: String
+    hasNextPage: Boolean!
+    hasPreviousPage: Boolean!
+    startCursor: String
+}
+
+### Profile
+type Profile {
+    username: String!
+    bio: String
+    following: Boolean!
+    image: String
+    items(first: Int, after: String, last: Int, before: String): ItemsConnection
+    favorites(first: Int, after: String, last: Int, before: String): ItemsConnection
+    feed(first: Int, after: String, last: Int, before: String): ItemsConnection
+}
+
+### User
+type User {
+    email: String!
+    profile: Profile!
+    token: String!
+    username: String!
+}
+
+### Error
+type Error {
+    message: String
+    errors: [ErrorItem!]
+}
+
+type ErrorItem {
+    key: String!
+    value: [String!]!
+}
+
+## Mutations
+
+# Input types.
+input UpdateItemInput {
+    description: String
+    image: String
+    title: String
+}
+
+input CreateItemInput {
+    description: String!
+    image: String!
+    tagList: [String]
+    title: String!
+}
+
+type ItemPayload {
+    item: Item
+}
+
+type CommentPayload {
+    comment: Comment
+}
+
+input CreateUserInput {
+    email: String!
+    username: String!
+    password: String!
+}
+
+input UpdateUserInput {
+    email: String
+    username: String
+    password: String
+    image: String
+    bio: String
+}
+
+type UserPayload {
+    user: User
+}
+
+type ProfilePayload {
+    profile: Profile
+}
+

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="io.spring.infrastructure.mybatis.mapper.ItemFavoriteMapper">
+    <insert id="insert">
+        insert into item_favorites (item_id, user_id) values (#{itemFavorite.itemId}, #{itemFavorite.userId})
+    </insert>
+    <delete id="delete">
+        delete from item_favorites where item_id = #{favorite.itemId} and user_id = #{favorite.userId}
+    </delete>
+    <select id="find" resultMap="itemFavorite">
+        select
+          AF.item_id itemFavoriteItemId,
+          AF.user_id itemFavoriteUserId
+          from item_favorites AF
+          where AF.item_id = #{itemId} and AF.user_id = #{userId}
+    </select>
+    <resultMap id="itemFavorite" type="io.spring.core.favorite.ItemFavorite">
+        <result column="itemFavoriteItemId" property="itemId"/>
+        <result column="itemFavoriteUserId" property="userId"/>
+    </resultMap>
+</mapper>
