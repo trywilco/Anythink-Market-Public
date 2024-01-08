@@ -21,7 +21,6 @@ public class NewItemParam {
   @NotBlank(message = "can't be empty")
   private String description;
 
-  @NotBlank(message = "can't be empty")
   private String image;
 
   private List<String> tagList;

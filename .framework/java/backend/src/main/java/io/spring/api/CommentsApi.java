@@ -75,9 +75,6 @@ public class CommentsApi {
         .findById(item.getId(), commentId)
         .map(
             comment -> {
-              if (!AuthorizationService.canWriteComment(user, item, comment)) {
-                throw new NoAuthorizationException();
-              }
               commentRepository.remove(comment);
               return ResponseEntity.noContent().build();
             })
