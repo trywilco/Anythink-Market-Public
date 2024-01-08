@@ -15,12 +15,12 @@ import org.springframework.context.annotation.Configuration;
 public class JacksonCustomizations {
 
   @Bean
-  public Module realWorldModules() {
-    return new RealWorldModules();
+  public Module anythinkMarkerModules() {
+    return new AnythinkMarketModules();
   }
 
-  public static class RealWorldModules extends SimpleModule {
-    public RealWorldModules() {
+  public static class AnythinkMarketModules extends SimpleModule {
+    public AnythinkMarketModules() {
       addSerializer(DateTime.class, new DateTimeSerializer());
     }
   }

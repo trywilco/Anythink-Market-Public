@@ -1,7 +1,5 @@
 # Anythink Market Backend
 
-> ### Spring boot + MyBatis codebase containing real world examples (CRUD, auth, advanced patterns, etc)
-
 # How it works
 
 The application uses Spring Boot (Web, Mybatis).
@@ -19,10 +17,10 @@ You'll need Java 11 installed.
 
     ./gradlew bootRun
 
-To test that it works, open a browser tab at http://localhost:3000/tags .  
-Alternatively, you can run
+To test that it works, open a browser tab at http://localhost:3000/api/tags
+Alternatively, you can run:
 
-    curl http://localhost:3000/tags
+    curl http://localhost:3000/api/tags
 
 # Run test
 
