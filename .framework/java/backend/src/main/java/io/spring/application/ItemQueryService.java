@@ -57,8 +57,7 @@ public class ItemQueryService {
       String favoritedBy,
       CursorPageParameter<DateTime> page,
       User currentUser) {
-    List<String> itemIds =
-        itemReadService.findItemsWithCursor(tag, seller, favoritedBy, page);
+    List<String> itemIds = itemReadService.findItemsWithCursor(tag, seller, favoritedBy, page);
     if (itemIds.size() == 0) {
       return new CursorPager<>(new ArrayList<>(), page.getDirection(), false);
     } else {
@@ -83,8 +82,7 @@ public class ItemQueryService {
     if (followedUsers.size() == 0) {
       return new CursorPager<>(new ArrayList<>(), page.getDirection(), false);
     } else {
-      List<ItemData> items =
-          itemReadService.findItemsOfSellersWithCursor(followedUsers, page);
+      List<ItemData> items = itemReadService.findItemsOfSellersWithCursor(followedUsers, page);
       boolean hasExtra = items.size() > page.getLimit();
       if (hasExtra) {
         items.remove(page.getLimit());
@@ -134,9 +132,7 @@ public class ItemQueryService {
     Set<String> followingSellers =
         userRelationshipQueryService.followingSellers(
             currentUser.getId(),
-            items.stream()
-                .map(itemData1 -> itemData1.getProfileData().getId())
-                .collect(toList()));
+            items.stream().map(itemData1 -> itemData1.getProfileData().getId()).collect(toList()));
     items.forEach(
         itemData -> {
           if (followingSellers.contains(itemData.getProfileData().getId())) {
@@ -154,15 +150,13 @@ public class ItemQueryService {
         item -> {
           countMap.put(item.getId(), item.getCount());
         });
-    items.forEach(
-        itemData -> itemData.setFavoritesCount(countMap.get(itemData.getId())));
+    items.forEach(itemData -> itemData.setFavoritesCount(countMap.get(itemData.getId())));
   }
 
   private void setIsFavorite(List<ItemData> items, User currentUser) {
     Set<String> favoritedItems =
         itemFavoritesReadService.userFavorites(
-            items.stream().map(itemData -> itemData.getId()).collect(toList()),
-            currentUser);
+            items.stream().map(itemData -> itemData.getId()).collect(toList()), currentUser);
 
     items.forEach(
         itemData -> {

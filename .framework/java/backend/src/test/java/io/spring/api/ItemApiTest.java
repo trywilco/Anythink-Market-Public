@@ -13,9 +13,9 @@ import io.spring.JacksonCustomizations;
 import io.spring.TestHelper;
 import io.spring.api.security.WebSecurityConfig;
 import io.spring.application.ItemQueryService;
-import io.spring.application.item.ItemCommandService;
 import io.spring.application.data.ItemData;
 import io.spring.application.data.ProfileData;
+import io.spring.application.item.ItemCommandService;
 import io.spring.core.item.Item;
 import io.spring.core.item.ItemRepository;
 import io.spring.core.user.User;
@@ -60,7 +60,6 @@ public class ItemApiTest extends TestWithCurrentUser {
         new Item(
             "Test New Item",
             "Desc",
-            "Body",
             "Image",
             Arrays.asList("java", "spring", "jpg"),
             user.getId(),
@@ -91,20 +90,17 @@ public class ItemApiTest extends TestWithCurrentUser {
     Item originalItem =
         new Item("old title", "old description", "old image", tagList, user.getId());
 
-    Item updatedItem =
-        new Item("new title", "new description", "old image", tagList, user.getId());
+    Item updatedItem = new Item("new title", "new description", "old image", tagList, user.getId());
 
     Map<String, Object> updateParam =
         prepareUpdateParam(
             updatedItem.getTitle(), updatedItem.getImage(), updatedItem.getDescription());
 
-    ItemData updatedItemData =
-        TestHelper.getItemDataFromItemAndUser(updatedItem, user);
+    ItemData updatedItemData = TestHelper.getItemDataFromItemAndUser(updatedItem, user);
 
     when(itemRepository.findBySlug(eq(originalItem.getSlug())))
         .thenReturn(Optional.of(originalItem));
-    when(itemCommandService.updateItem(eq(originalItem), any()))
-        .thenReturn(updatedItem);
+    when(itemCommandService.updateItem(eq(originalItem), any())).thenReturn(updatedItem);
     when(itemQueryService.findBySlug(eq(updatedItem.getSlug()), eq(user)))
         .thenReturn(Optional.of(updatedItemData));
 

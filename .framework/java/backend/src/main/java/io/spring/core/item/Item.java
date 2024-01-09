@@ -59,9 +59,9 @@ public class Item {
       this.updatedAt = new DateTime();
     }
     if (!Util.isEmpty(image)) {
-       this.image = image;
-       this.updatedAt = new DateTime();
-     }
+      this.image = image;
+      this.updatedAt = new DateTime();
+    }
   }
 
   public static String toSlug(String title) {

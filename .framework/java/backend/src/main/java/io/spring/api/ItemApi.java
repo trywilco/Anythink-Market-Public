@@ -3,9 +3,9 @@ package io.spring.api;
 import io.spring.api.exception.NoAuthorizationException;
 import io.spring.api.exception.ResourceNotFoundException;
 import io.spring.application.ItemQueryService;
+import io.spring.application.data.ItemData;
 import io.spring.application.item.ItemCommandService;
 import io.spring.application.item.UpdateItemParam;
-import io.spring.application.data.ItemData;
 import io.spring.core.item.Item;
 import io.spring.core.item.ItemRepository;
 import io.spring.core.service.AuthorizationService;
@@ -53,11 +53,9 @@ public class ItemApi {
               if (!AuthorizationService.canWriteItem(user, item)) {
                 throw new NoAuthorizationException();
               }
-              Item updatedItem =
-                  itemCommandService.updateItem(item, updateItemParam);
+              Item updatedItem = itemCommandService.updateItem(item, updateItemParam);
               return ResponseEntity.ok(
-                  itemResponse(
-                      itemQueryService.findBySlug(updatedItem.getSlug(), user).get()));
+                  itemResponse(itemQueryService.findBySlug(updatedItem.getSlug(), user).get()));
             })
         .orElseThrow(ResourceNotFoundException::new);
   }

@@ -58,8 +58,8 @@
             </if>
         </where>
         order by A.created_at desc
-        offset #{page.offset} rows
         limit #{page.limit}
+        offset #{page.offset}
     </select>
     <select id="countItem" resultType="java.lang.Integer">
         select
@@ -97,8 +97,8 @@
         <foreach index="index" collection="sellers" item="id" open="(" separator="," close=")">
             #{id}
         </foreach>
-        offset #{page.offset} rows
         limit #{page.limit}
+        offset #{page.offset}
     </select>
     <select id="countFeedSize" resultType="java.lang.Integer">
         select count(1) from items A where A.seller_id in

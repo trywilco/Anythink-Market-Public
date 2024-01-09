@@ -10,17 +10,17 @@ import graphql.relay.DefaultConnectionCursor;
 import graphql.relay.DefaultPageInfo;
 import graphql.schema.DataFetchingEnvironment;
 import io.spring.api.exception.ResourceNotFoundException;
-import io.spring.application.ItemQueryService;
 import io.spring.application.CursorPageParameter;
 import io.spring.application.CursorPager;
 import io.spring.application.CursorPager.Direction;
 import io.spring.application.DateTimeCursor;
-import io.spring.application.data.ItemData;
+import io.spring.application.ItemQueryService;
 import io.spring.application.data.CommentData;
+import io.spring.application.data.ItemData;
 import io.spring.core.user.User;
 import io.spring.core.user.UserRepository;
-import io.spring.graphql.DgsConstants.ITEMPAYLOAD;
 import io.spring.graphql.DgsConstants.COMMENT;
+import io.spring.graphql.DgsConstants.ITEMPAYLOAD;
 import io.spring.graphql.DgsConstants.PROFILE;
 import io.spring.graphql.DgsConstants.QUERY;
 import io.spring.graphql.types.Item;
@@ -80,8 +80,7 @@ public class ItemDatafetcher {
             .build();
     return DataFetcherResult.<ItemsConnection>newResult()
         .data(itemsConnection)
-        .localContext(
-            items.getData().stream().collect(Collectors.toMap(ItemData::getSlug, a -> a)))
+        .localContext(items.getData().stream().collect(Collectors.toMap(ItemData::getSlug, a -> a)))
         .build();
   }
 
@@ -130,8 +129,7 @@ public class ItemDatafetcher {
             .build();
     return DataFetcherResult.<ItemsConnection>newResult()
         .data(itemsConnection)
-        .localContext(
-            items.getData().stream().collect(Collectors.toMap(ItemData::getSlug, a -> a)))
+        .localContext(items.getData().stream().collect(Collectors.toMap(ItemData::getSlug, a -> a)))
         .build();
   }
 
@@ -184,8 +182,7 @@ public class ItemDatafetcher {
             .build();
     return DataFetcherResult.<ItemsConnection>newResult()
         .data(itemsConnection)
-        .localContext(
-            items.getData().stream().collect(Collectors.toMap(ItemData::getSlug, a -> a)))
+        .localContext(items.getData().stream().collect(Collectors.toMap(ItemData::getSlug, a -> a)))
         .build();
   }
 
@@ -237,8 +234,7 @@ public class ItemDatafetcher {
             .build();
     return DataFetcherResult.<ItemsConnection>newResult()
         .data(itemsConnection)
-        .localContext(
-            items.getData().stream().collect(Collectors.toMap(ItemData::getSlug, a -> a)))
+        .localContext(items.getData().stream().collect(Collectors.toMap(ItemData::getSlug, a -> a)))
         .build();
   }
 
@@ -292,8 +288,7 @@ public class ItemDatafetcher {
             .build();
     return DataFetcherResult.<ItemsConnection>newResult()
         .data(itemsConnection)
-        .localContext(
-            items.getData().stream().collect(Collectors.toMap(ItemData::getSlug, a -> a)))
+        .localContext(items.getData().stream().collect(Collectors.toMap(ItemData::getSlug, a -> a)))
         .build();
   }
 
@@ -319,8 +314,7 @@ public class ItemDatafetcher {
   }
 
   @DgsData(parentType = COMMENT.TYPE_NAME, field = COMMENT.Item)
-  public DataFetcherResult<Item> getCommentItem(
-      DataFetchingEnvironment dataFetchingEnvironment) {
+  public DataFetcherResult<Item> getCommentItem(DataFetchingEnvironment dataFetchingEnvironment) {
     CommentData comment = dataFetchingEnvironment.getLocalContext();
     User current = SecurityUtil.getCurrentUser().orElse(null);
     ItemData itemData =

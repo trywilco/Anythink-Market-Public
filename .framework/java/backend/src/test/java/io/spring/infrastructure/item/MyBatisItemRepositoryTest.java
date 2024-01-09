@@ -26,9 +26,12 @@ public class MyBatisItemRepositoryTest extends DbTestBase {
 
   @BeforeEach
   public void setUp() {
-    User user = new User("aisensiy@gmail.com", "aisensiy", "123", "bio", "default");
+    int randomNumber = random.nextInt();
+    User user =
+        new User(
+            "aisensiy" + randomNumber + "@gmail.com", "aisensiy" + randomNumber, "123", "", "");
     userRepository.save(user);
-    item = new Item("test", "desc", "image", "image", Arrays.asList("java", "spring"), user.getId());
+    item = new Item("test", "desc", "image", Arrays.asList("java", "spring"), user.getId());
   }
 
   @Test
@@ -53,7 +56,6 @@ public class MyBatisItemRepositoryTest extends DbTestBase {
     Assertions.assertTrue(optional.isPresent());
     Item fetched = optional.get();
     Assertions.assertEquals(fetched.getTitle(), newTitle);
-    Assertions.assertNotEquals(fetched.getBody(), "");
   }
 
   @Test

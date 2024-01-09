@@ -54,7 +54,6 @@ public class ItemsApi {
       @RequestParam(value = "seller", required = false) String seller,
       @AuthenticationPrincipal User user) {
     return ResponseEntity.ok(
-        itemQueryService.findRecentItems(
-            tag, seller, favoritedBy, new Page(offset, limit), user));
+        itemQueryService.findRecentItems(tag, seller, favoritedBy, new Page(offset, limit), user));
   }
 }

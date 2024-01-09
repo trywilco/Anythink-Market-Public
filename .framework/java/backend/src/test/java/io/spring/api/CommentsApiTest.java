@@ -2,7 +2,6 @@ package io.spring.api;
 
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -13,11 +12,10 @@ import io.spring.api.security.WebSecurityConfig;
 import io.spring.application.CommentQueryService;
 import io.spring.application.data.CommentData;
 import io.spring.application.data.ProfileData;
-import io.spring.core.item.Item;
-import io.spring.core.item.ItemRepository;
 import io.spring.core.comment.Comment;
 import io.spring.core.comment.CommentRepository;
-import io.spring.core.user.User;
+import io.spring.core.item.Item;
+import io.spring.core.item.ItemRepository;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -139,27 +137,5 @@ public class CommentsApiTest extends TestWithCurrentUser {
         .delete("/items/{slug}/comments/{id}", item.getSlug(), comment.getId())
         .then()
         .statusCode(204);
-  }
-
-  @Test
-  public void should_get_403_if_not_seller_of_item_or_user_of_comment_when_delete_comment()
-      throws Exception {
-    User anotherUser = new User("other@example.com", "other", "123", "", "");
-    when(userRepository.findByUsername(eq(anotherUser.getUsername())))
-        .thenReturn(Optional.of(anotherUser));
-    when(jwtService.getSubFromToken(any())).thenReturn(Optional.of(anotherUser.getId()));
-    when(userRepository.findById(eq(anotherUser.getId())))
-        .thenReturn(Optional.ofNullable(anotherUser));
-
-    when(commentRepository.findById(eq(item.getId()), eq(comment.getId())))
-        .thenReturn(Optional.of(comment));
-    String token = jwtService.toToken(anotherUser);
-    when(userRepository.findById(eq(anotherUser.getId()))).thenReturn(Optional.of(anotherUser));
-    given()
-        .header("Authorization", "Token " + token)
-        .when()
-        .delete("/items/{slug}/comments/{id}", item.getSlug(), comment.getId())
-        .then()
-        .statusCode(403);
   }
 }

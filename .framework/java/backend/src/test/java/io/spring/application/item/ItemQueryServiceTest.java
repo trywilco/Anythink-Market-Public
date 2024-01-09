@@ -1,17 +1,17 @@
 package io.spring.application.item;
 
-import io.spring.application.ItemQueryService;
 import io.spring.application.CursorPageParameter;
 import io.spring.application.CursorPager;
 import io.spring.application.CursorPager.Direction;
 import io.spring.application.DateTimeCursor;
+import io.spring.application.ItemQueryService;
 import io.spring.application.Page;
 import io.spring.application.data.ItemData;
 import io.spring.application.data.ItemDataList;
-import io.spring.core.item.Item;
-import io.spring.core.item.ItemRepository;
 import io.spring.core.favorite.ItemFavorite;
 import io.spring.core.favorite.ItemFavoriteRepository;
+import io.spring.core.item.Item;
+import io.spring.core.item.ItemRepository;
 import io.spring.core.user.FollowRelation;
 import io.spring.core.user.User;
 import io.spring.core.user.UserRepository;
@@ -95,14 +95,12 @@ public class ItemQueryServiceTest extends DbTestBase {
             new DateTime().minusHours(1));
     itemRepository.save(anotherItem);
 
-    ItemDataList recentItems =
-        queryService.findRecentItems(null, null, null, new Page(), user);
+    ItemDataList recentItems = queryService.findRecentItems(null, null, null, new Page(), user);
     Assertions.assertEquals(recentItems.getCount(), 2);
     Assertions.assertEquals(recentItems.getItemDatas().size(), 2);
     Assertions.assertEquals(recentItems.getItemDatas().get(0).getId(), item.getId());
 
-    ItemDataList nodata =
-        queryService.findRecentItems(null, null, null, new Page(2, 10), user);
+    ItemDataList nodata = queryService.findRecentItems(null, null, null, new Page(2, 10), user);
     Assertions.assertEquals(nodata.getCount(), 2);
     Assertions.assertEquals(nodata.getItemDatas().size(), 0);
   }
@@ -182,12 +180,10 @@ public class ItemQueryServiceTest extends DbTestBase {
 
   @Test
   public void should_query_item_by_tag() {
-    Item anotherItem =
-        new Item("new item", "desc", "image", Arrays.asList("test"), user.getId());
+    Item anotherItem = new Item("new item", "desc", "image", Arrays.asList("test"), user.getId());
     itemRepository.save(anotherItem);
 
-    ItemDataList recentItems =
-        queryService.findRecentItems("spring", null, null, new Page(), user);
+    ItemDataList recentItems = queryService.findRecentItems("spring", null, null, new Page(), user);
     Assertions.assertEquals(recentItems.getItemDatas().size(), 1);
     Assertions.assertEquals(recentItems.getCount(), 1);
     Assertions.assertEquals(recentItems.getItemDatas().get(0).getId(), item.getId());

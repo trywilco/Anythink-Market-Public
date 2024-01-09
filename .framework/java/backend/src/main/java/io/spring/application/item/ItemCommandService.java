@@ -29,9 +29,7 @@ public class ItemCommandService {
 
   public Item updateItem(Item item, @Valid UpdateItemParam updateItemParam) {
     item.update(
-        updateItemParam.getTitle(),
-        updateItemParam.getDescription(),
-        updateItemParam.getImage());
+        updateItemParam.getTitle(), updateItemParam.getDescription(), updateItemParam.getImage());
     itemRepository.save(item);
     return item;
   }

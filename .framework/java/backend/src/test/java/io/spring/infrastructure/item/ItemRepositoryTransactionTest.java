@@ -27,11 +27,10 @@ public class ItemRepositoryTransactionTest {
   public void transactional_test() {
     User user = new User("aisensiy@gmail.com", "aisensiy", "123", "bio", "default");
     userRepository.save(user);
-    Item item =
-        new Item("test", "desc", "image", "image", Arrays.asList("java", "spring"), user.getId());
+    Item item = new Item("test", "desc", "image", Arrays.asList("java", "spring"), user.getId());
     itemRepository.save(item);
     Item anotherItem =
-        new Item("test", "desc", "image", "image", Arrays.asList("java", "spring", "other"), user.getId());
+        new Item("test", "desc", "image", Arrays.asList("java", "spring", "other"), user.getId());
     try {
       itemRepository.save(anotherItem);
     } catch (Exception e) {

@@ -8,10 +8,10 @@ import io.spring.api.exception.NoAuthorizationException;
 import io.spring.api.exception.ResourceNotFoundException;
 import io.spring.application.CommentQueryService;
 import io.spring.application.data.CommentData;
-import io.spring.core.item.Item;
-import io.spring.core.item.ItemRepository;
 import io.spring.core.comment.Comment;
 import io.spring.core.comment.CommentRepository;
+import io.spring.core.item.Item;
+import io.spring.core.item.ItemRepository;
 import io.spring.core.service.AuthorizationService;
 import io.spring.core.user.User;
 import io.spring.graphql.DgsConstants.MUTATION;
@@ -32,8 +32,7 @@ public class CommentMutation {
   public DataFetcherResult<CommentPayload> createComment(
       @InputArgument("slug") String slug, @InputArgument("body") String body) {
     User user = SecurityUtil.getCurrentUser().orElseThrow(AuthenticationException::new);
-    Item item =
-        itemRepository.findBySlug(slug).orElseThrow(ResourceNotFoundException::new);
+    Item item = itemRepository.findBySlug(slug).orElseThrow(ResourceNotFoundException::new);
     Comment comment = new Comment(body, user.getId(), item.getId());
     commentRepository.save(comment);
     CommentData commentData =
@@ -51,8 +50,7 @@ public class CommentMutation {
       @InputArgument("slug") String slug, @InputArgument("id") String commentId) {
     User user = SecurityUtil.getCurrentUser().orElseThrow(AuthenticationException::new);
 
-    Item item =
-        itemRepository.findBySlug(slug).orElseThrow(ResourceNotFoundException::new);
+    Item item = itemRepository.findBySlug(slug).orElseThrow(ResourceNotFoundException::new);
     return commentRepository
         .findById(item.getId(), commentId)
         .map(
