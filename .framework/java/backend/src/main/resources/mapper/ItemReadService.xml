@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="io.spring.infrastructure.mybatis.readservice.ItemReadService">
+    <sql id="profileColumns">
+        U.id userId,
+        U.username userUsername,
+        U.bio userBio,
+        U.image userImage
+    </sql>
+    <sql id="selectItemData">
+        select
+        A.id itemId,
+        A.slug itemSlug,
+        A.title itemTitle,
+        A.description itemDescription,
+        A.image itemImage,
+        A.created_at itemCreatedAt,
+        A.updated_at itemUpdatedAt,
+        T.name tagName,
+        <include refid="profileColumns"/>
+        from
+        items A
+        left join item_tags AT on A.id = AT.item_id
+        left join tags T on T.id = AT.tag_id
+        left join users U on U.id = A.seller_id
+    </sql>
+    <sql id="selectItemIds">
+        select
+        DISTINCT(A.id) itemId, A.created_at
+        from
+        items A
+        left join item_tags AT on A.id = AT.item_id
+        left join tags T on T.id = AT.tag_id
+        left join item_favorites AF on AF.item_id = A.id
+        left join users AU on AU.id = A.seller_id
+        left join users AFU on AFU.id = AF.user_id
+    </sql>
+
+    <select id="findById" resultMap="transfer.data.itemData">
+        <include refid="selectItemData"/>
+        where A.id = #{id}
+    </select>
+    <select id="findBySlug" resultMap="transfer.data.itemData">
+        <include refid="selectItemData"/>
+        where A.slug = #{slug}
+    </select>
+    <select id="queryItems" resultMap="itemId">
+        <include refid="selectItemIds" />
+        <where>
+            <if test="tag != null">
+                T.name = #{tag}
+            </if>
+            <if test="seller != null">
+                AND AU.username = #{seller}
+            </if>
+            <if test="favoritedBy != null">
+                AND AFU.username = #{favoritedBy}
+            </if>
+        </where>
+        order by A.created_at desc
+        offset #{page.offset} rows
+        limit #{page.limit}
+    </select>
+    <select id="countItem" resultType="java.lang.Integer">
+        select
+        count(DISTINCT A.id)
+        from
+        items A
+        left join item_tags AT on A.id = AT.item_id
+        left join tags T on T.id = AT.tag_id
+        left join item_favorites AF on AF.item_id = A.id
+        left join users AU on AU.id = A.seller_id
+        left join users AFU on AFU.id = AF.user_id
+        <where>
+            <if test="tag != null">
+                T.name = #{tag}
+            </if>
+            <if test="seller != null">
+                AND AU.username = #{seller}
+            </if>
+            <if test="favoritedBy != null">
+                AND AFU.username = #{favoritedBy}
+            </if>
+        </where>
+    </select>
+    <select id="findItems" resultMap="transfer.data.itemData">
+        <include refid="selectItemData"/>
+        where A.id in
+        <foreach index="index" collection="itemIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        order by A.created_at desc
+    </select>
+    <select id="findItemsOfSellers" resultMap="transfer.data.itemData">
+        <include refid="selectItemData"/>
+        where A.seller_id in
+        <foreach index="index" collection="sellers" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        offset #{page.offset} rows
+        limit #{page.limit}
+    </select>
+    <select id="countFeedSize" resultType="java.lang.Integer">
+        select count(1) from items A where A.seller_id in
+        <foreach collection="sellers" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+    <select id="findItemsWithCursor" resultType="java.lang.String">
+        <include refid="selectItemIds" />
+        <where>
+            <if test="tag != null">
+                T.name = #{tag}
+            </if>
+            <if test="seller != null">
+                AND AU.username = #{seller}
+            </if>
+            <if test="favoritedBy != null">
+                AND AFU.username = #{favoritedBy}
+            </if>
+            <if test='page.cursor != null and page.direction.name() == "NEXT"'>
+                AND A.created_at &lt; #{page.cursor}
+            </if>
+            <if test='page.cursor != null and page.direction.name() == "PREV"'>
+                AND A.created_at > #{page.cursor}
+            </if>
+        </where>
+        <if test='page.direction.name() == "NEXT"'>
+            order by A.created_at desc
+        </if>
+        <if test='page.direction.name() == "PREV"'>
+            order by A.created_at asc
+        </if>
+        limit #{page.queryLimit}
+    </select>
+    <select id="findItemsOfSellersWithCursor" resultMap="transfer.data.itemData">
+        <include refid="selectItemData"/>
+        <where>
+        A.seller_id in
+        <foreach index="index" collection="sellers" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        <if test='page.cursor != null and page.direction.name() == "NEXT"'>
+            AND A.created_at &lt; #{page.cursor}
+        </if>
+        <if test='page.cursor != null and page.direction.name() == "PREV"'>
+            AND A.created_at > #{page.cursor}
+        </if>
+        <if test='page.direction.name() == "NEXT"'>
+            order by A.created_at desc
+        </if>
+        <if test='page.direction.name() == "PREV"'>
+            order by A.created_at asc
+        </if>
+        </where>
+        limit #{page.queryLimit}
+    </select>
+
+    <resultMap id="itemId" type="string">
+        <id javaType="string" column="itemId"/>
+    </resultMap>
+</mapper>
