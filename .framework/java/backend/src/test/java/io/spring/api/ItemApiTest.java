@@ -69,7 +69,7 @@ public class ItemApiTest extends TestWithCurrentUser {
     when(itemQueryService.findBySlug(eq(slug), eq(null))).thenReturn(Optional.of(itemData));
 
     RestAssuredMockMvc.when()
-        .get("/items/{slug}", slug)
+        .get("/api/items/{slug}", slug)
         .then()
         .statusCode(200)
         .body("item.slug", equalTo(slug))
@@ -80,7 +80,7 @@ public class ItemApiTest extends TestWithCurrentUser {
   @Test
   public void should_404_if_item_not_found() throws Exception {
     when(itemQueryService.findBySlug(anyString(), any())).thenReturn(Optional.empty());
-    RestAssuredMockMvc.when().get("/items/not-exists").then().statusCode(404);
+    RestAssuredMockMvc.when().get("/api/items/not-exists").then().statusCode(404);
   }
 
   @Test
@@ -109,7 +109,7 @@ public class ItemApiTest extends TestWithCurrentUser {
         .header("Authorization", "Token " + token)
         .body(updateParam)
         .when()
-        .put("/items/{slug}", originalItem.getSlug())
+        .put("/api/items/{slug}", originalItem.getSlug())
         .then()
         .statusCode(200)
         .body("item.slug", equalTo(updatedItemData.getSlug()));
@@ -157,7 +157,7 @@ public class ItemApiTest extends TestWithCurrentUser {
         .header("Authorization", "Token " + token)
         .body(updateParam)
         .when()
-        .put("/items/{slug}", item.getSlug())
+        .put("/api/items/{slug}", item.getSlug())
         .then()
         .statusCode(403);
   }
@@ -175,7 +175,7 @@ public class ItemApiTest extends TestWithCurrentUser {
     given()
         .header("Authorization", "Token " + token)
         .when()
-        .delete("/items/{slug}", item.getSlug())
+        .delete("/api/items/{slug}", item.getSlug())
         .then()
         .statusCode(204);
 
@@ -198,7 +198,7 @@ public class ItemApiTest extends TestWithCurrentUser {
     given()
         .header("Authorization", "Token " + token)
         .when()
-        .delete("/items/{slug}", item.getSlug())
+        .delete("/api/items/{slug}", item.getSlug())
         .then()
         .statusCode(403);
   }

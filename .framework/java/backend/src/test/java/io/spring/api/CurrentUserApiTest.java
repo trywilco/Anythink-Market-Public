@@ -54,7 +54,7 @@ public class CurrentUserApiTest extends TestWithCurrentUser {
         .header("Authorization", "Token " + token)
         .contentType("application/json")
         .when()
-        .get("/user")
+        .get("/api/user")
         .then()
         .statusCode(200)
         .body("user.email", equalTo(email))
@@ -66,7 +66,7 @@ public class CurrentUserApiTest extends TestWithCurrentUser {
 
   @Test
   public void should_get_401_without_token() throws Exception {
-    given().contentType("application/json").when().get("/user").then().statusCode(401);
+    given().contentType("application/json").when().get("/api/user").then().statusCode(401);
   }
 
   @Test
@@ -77,7 +77,7 @@ public class CurrentUserApiTest extends TestWithCurrentUser {
         .contentType("application/json")
         .header("Authorization", "Token " + invalidToken)
         .when()
-        .get("/user")
+        .get("/api/user")
         .then()
         .statusCode(401);
   }
@@ -113,7 +113,7 @@ public class CurrentUserApiTest extends TestWithCurrentUser {
         .header("Authorization", "Token " + token)
         .body(param)
         .when()
-        .put("/user")
+        .put("/api/user")
         .then()
         .statusCode(200);
   }
@@ -137,7 +137,7 @@ public class CurrentUserApiTest extends TestWithCurrentUser {
         .header("Authorization", "Token " + token)
         .body(param)
         .when()
-        .put("/user")
+        .put("/api/user")
         .prettyPeek()
         .then()
         .statusCode(422)
@@ -172,7 +172,7 @@ public class CurrentUserApiTest extends TestWithCurrentUser {
               }
             })
         .when()
-        .put("/user")
+        .put("/api/user")
         .then()
         .statusCode(401);
   }

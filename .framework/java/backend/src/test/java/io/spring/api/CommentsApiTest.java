@@ -82,7 +82,7 @@ public class CommentsApiTest extends TestWithCurrentUser {
         .header("Authorization", "Token " + token)
         .body(param)
         .when()
-        .post("/items/{slug}/comments", item.getSlug())
+        .post("/api/items/{slug}/comments", item.getSlug())
         .then()
         .statusCode(201)
         .body("comment.body", equalTo(commentData.getBody()));
@@ -108,7 +108,7 @@ public class CommentsApiTest extends TestWithCurrentUser {
         .header("Authorization", "Token " + token)
         .body(param)
         .when()
-        .post("/items/{slug}/comments", item.getSlug())
+        .post("/api/items/{slug}/comments", item.getSlug())
         .then()
         .statusCode(422)
         .body("errors.body[0]", equalTo("can't be empty"));
@@ -119,7 +119,7 @@ public class CommentsApiTest extends TestWithCurrentUser {
     when(commentQueryService.findByItemId(anyString(), eq(null)))
         .thenReturn(Arrays.asList(commentData));
     RestAssuredMockMvc.when()
-        .get("/items/{slug}/comments", item.getSlug())
+        .get("/api/items/{slug}/comments", item.getSlug())
         .prettyPeek()
         .then()
         .statusCode(200)
@@ -134,7 +134,7 @@ public class CommentsApiTest extends TestWithCurrentUser {
     given()
         .header("Authorization", "Token " + token)
         .when()
-        .delete("/items/{slug}/comments/{id}", item.getSlug(), comment.getId())
+        .delete("/api/items/{slug}/comments/{id}", item.getSlug(), comment.getId())
         .then()
         .statusCode(204);
   }

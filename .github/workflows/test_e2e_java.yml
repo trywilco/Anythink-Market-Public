@@ -14,6 +14,8 @@ jobs:
         image: postgres:13
         env:
           POSTGRES_PASSWORD: postgres
+          SECRET_KEY: secret
+          POSTGRES_DB: anythink-market
         ports:
           - 5432:5432
         options: >-
@@ -38,7 +40,7 @@ jobs:
       - run: ./gradlew build
         working-directory: .framework/java/backend
 
-      - run: ENGINE_BASE_URL=http://localhost:3003 WILCO_ID=0 DATABASE_URL=postgresql://postgres:postgres@localhost/anythink-market ./gradlew bootRun >& /dev/null &
+      - run: ENGINE_BASE_URL=http://localhost:3003 WILCO_ID=0 SPRING_DATASOURCE_URL=jdbc:postgresql://localhost/anythink-market SPRING_DATASOURCE_USERNAME=postgres SPRING_DATASOURCE_PASSWORD=postgres ./gradlew bootRun >& /dev/null &
         working-directory: .framework/java/backend
 
       - name: Run checks

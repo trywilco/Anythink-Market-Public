@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "/items/{slug}/comments")
+@RequestMapping(path = "/api/items/{slug}/comments")
 @AllArgsConstructor
 public class CommentsApi {
   private ItemRepository itemRepository;

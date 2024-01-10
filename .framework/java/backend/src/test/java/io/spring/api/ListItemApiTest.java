@@ -47,12 +47,12 @@ public class ListItemApiTest extends TestWithCurrentUser {
     when(itemQueryService.findRecentItems(
             eq(null), eq(null), eq(null), eq(new Page(0, 20)), eq(null)))
         .thenReturn(itemDataList);
-    RestAssuredMockMvc.when().get("/items").prettyPeek().then().statusCode(200);
+    RestAssuredMockMvc.when().get("/api/items").prettyPeek().then().statusCode(200);
   }
 
   @Test
   public void should_get_feeds_401_without_login() throws Exception {
-    RestAssuredMockMvc.when().get("/items/feed").prettyPeek().then().statusCode(401);
+    RestAssuredMockMvc.when().get("/api/items/feed").prettyPeek().then().statusCode(401);
   }
 
   @Test
@@ -64,7 +64,7 @@ public class ListItemApiTest extends TestWithCurrentUser {
     given()
         .header("Authorization", "Token " + token)
         .when()
-        .get("/items/feed")
+        .get("/api/items/feed")
         .prettyPeek()
         .then()
         .statusCode(200);

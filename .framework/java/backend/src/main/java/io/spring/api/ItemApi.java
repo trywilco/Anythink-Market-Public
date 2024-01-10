@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "/items/{slug}")
+@RequestMapping(path = "/api/items/{slug}")
 @AllArgsConstructor
 public class ItemApi {
   private ItemQueryService itemQueryService;
