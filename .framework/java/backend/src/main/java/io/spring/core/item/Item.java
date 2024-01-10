@@ -1,11 +1,12 @@
 package io.spring.core.item;
 
-import static java.util.stream.Collectors.toList;
-
 import io.spring.Util;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,7 +43,11 @@ public class Item {
     this.title = title;
     this.description = description;
     this.image = image;
-    this.tags = new HashSet<>(tagList).stream().map(Tag::new).collect(toList());
+    this.tags =
+        Optional.ofNullable(tagList)
+            .map(list -> new HashSet<>(list).stream().map(Tag::new).collect(Collectors.toList()))
+            .orElse(new ArrayList<Tag>());
+
     this.sellerId = sellerId;
     this.createdAt = createdAt;
     this.updatedAt = createdAt;
@@ -51,7 +56,6 @@ public class Item {
   public void update(String title, String description, String image) {
     if (!Util.isEmpty(title)) {
       this.title = title;
-      this.slug = toSlug(title);
       this.updatedAt = new DateTime();
     }
     if (!Util.isEmpty(description)) {

@@ -47,6 +47,8 @@ public class ItemQueryService {
       if (user != null) {
         fillExtraInfo(itemData.getId(), user, itemData);
       }
+
+      setFavoriteCount(Collections.singletonList(itemData));
       return Optional.of(itemData);
     }
   }
@@ -114,6 +116,11 @@ public class ItemQueryService {
       return new ItemDataList(new ArrayList<>(), 0);
     } else {
       List<ItemData> items = itemReadService.findItemsOfSellers(followedUsers, page);
+      int offset = page.getOffset();
+      int limit = page.getLimit();
+      int endIndex = Math.min(offset + limit, items.size());
+      items = items.subList(offset, endIndex);
+
       fillExtraInfo(items, user);
       int count = itemReadService.countFeedSize(followedUsers);
       return new ItemDataList(items, count);

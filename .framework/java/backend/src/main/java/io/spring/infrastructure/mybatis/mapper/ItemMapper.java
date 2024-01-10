@@ -4,6 +4,7 @@ import io.spring.core.item.Item;
 import io.spring.core.item.Tag;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.joda.time.DateTime;
 
 @Mapper
 public interface ItemMapper {
@@ -15,7 +16,10 @@ public interface ItemMapper {
 
   void insertTag(@Param("tag") Tag tag);
 
-  void insertItemTagRelation(@Param("itemId") String itemId, @Param("tagId") String tagId);
+  void insertItemTagRelation(
+      @Param("itemId") String itemId,
+      @Param("tagId") String tagId,
+      @Param("createdAt") DateTime createdAt);
 
   Item findBySlug(@Param("slug") String slug);
 

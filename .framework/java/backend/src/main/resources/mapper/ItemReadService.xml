@@ -89,7 +89,7 @@
         <foreach index="index" collection="itemIds" item="id" open="(" separator="," close=")">
             #{id}
         </foreach>
-        order by A.created_at desc
+        order by A.created_at desc, AT.created_at asc
     </select>
     <select id="findItemsOfSellers" resultMap="transfer.data.itemData">
         <include refid="selectItemData"/>
@@ -97,8 +97,6 @@
         <foreach index="index" collection="sellers" item="id" open="(" separator="," close=")">
             #{id}
         </foreach>
-        limit #{page.limit}
-        offset #{page.offset}
     </select>
     <select id="countFeedSize" resultType="java.lang.Integer">
         select count(1) from items A where A.seller_id in

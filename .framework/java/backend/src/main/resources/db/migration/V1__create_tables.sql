@@ -36,7 +36,8 @@ create table tags (
 
 create table item_tags (
   item_id varchar(255) not null,
-  tag_id varchar(255) not null
+  tag_id varchar(255) not null,
+  created_at TIMESTAMP not null
 );
 
 create table comments (
