@@ -6,7 +6,9 @@ import io.spring.application.item.ItemCommandService;
 import io.spring.application.item.NewItemParam;
 import io.spring.core.item.Item;
 import io.spring.core.user.User;
+import io.spring.infrastructure.service.SendEventService;
 import java.util.HashMap;
+import java.util.Map;
 import javax.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +31,12 @@ public class ItemsApi {
   public ResponseEntity createItem(
       @Valid @RequestBody NewItemParam newItemParam, @AuthenticationPrincipal User user) {
     Item item = itemCommandService.createItem(newItemParam, user);
+
+    SendEventService sendEventService = new SendEventService();
+    Map<String, Object> metadata = new HashMap<>();
+    metadata.put("item", item.getTitle());
+    sendEventService.sendEvent("item_created", metadata);
+
     return ResponseEntity.ok(
         new HashMap<String, Object>() {
           {

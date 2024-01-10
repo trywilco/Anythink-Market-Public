@@ -54,6 +54,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .permitAll()
         .antMatchers("/health")
         .permitAll()
+        .antMatchers("/api/ping")
+        .permitAll()
         .antMatchers("/graphql")
         .permitAll()
         .antMatchers(HttpMethod.GET, "/api/items/feed")
