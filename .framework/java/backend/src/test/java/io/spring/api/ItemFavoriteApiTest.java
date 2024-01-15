@@ -13,11 +13,11 @@ import io.spring.api.security.WebSecurityConfig;
 import io.spring.application.ItemQueryService;
 import io.spring.application.data.ItemData;
 import io.spring.application.data.ProfileData;
+import io.spring.core.favorite.ItemFavorite;
+import io.spring.core.favorite.ItemFavoriteRepository;
 import io.spring.core.item.Item;
 import io.spring.core.item.ItemRepository;
 import io.spring.core.item.Tag;
-import io.spring.core.favorite.ItemFavorite;
-import io.spring.core.favorite.ItemFavoriteRepository;
 import io.spring.core.user.User;
 import java.util.Arrays;
 import java.util.Optional;
@@ -77,7 +77,7 @@ public class ItemFavoriteApiTest extends TestWithCurrentUser {
     given()
         .header("Authorization", "Token " + token)
         .when()
-        .post("/items/{slug}/favorite", item.getSlug())
+        .post("/api/items/{slug}/favorite", item.getSlug())
         .prettyPeek()
         .then()
         .statusCode(200)
@@ -93,7 +93,7 @@ public class ItemFavoriteApiTest extends TestWithCurrentUser {
     given()
         .header("Authorization", "Token " + token)
         .when()
-        .delete("/items/{slug}/favorite", item.getSlug())
+        .delete("/api/items/{slug}/favorite", item.getSlug())
         .prettyPeek()
         .then()
         .statusCode(200)

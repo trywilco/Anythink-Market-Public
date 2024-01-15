@@ -47,6 +47,8 @@ public class ItemQueryService {
       if (user != null) {
         fillExtraInfo(itemData.getId(), user, itemData);
       }
+
+      setFavoriteCount(Collections.singletonList(itemData));
       return Optional.of(itemData);
     }
   }
@@ -57,8 +59,7 @@ public class ItemQueryService {
       String favoritedBy,
       CursorPageParameter<DateTime> page,
       User currentUser) {
-    List<String> itemIds =
-        itemReadService.findItemsWithCursor(tag, seller, favoritedBy, page);
+    List<String> itemIds = itemReadService.findItemsWithCursor(tag, seller, favoritedBy, page);
     if (itemIds.size() == 0) {
       return new CursorPager<>(new ArrayList<>(), page.getDirection(), false);
     } else {
@@ -83,8 +84,7 @@ public class ItemQueryService {
     if (followedUsers.size() == 0) {
       return new CursorPager<>(new ArrayList<>(), page.getDirection(), false);
     } else {
-      List<ItemData> items =
-          itemReadService.findItemsOfSellersWithCursor(followedUsers, page);
+      List<ItemData> items = itemReadService.findItemsOfSellersWithCursor(followedUsers, page);
       boolean hasExtra = items.size() > page.getLimit();
       if (hasExtra) {
         items.remove(page.getLimit());
@@ -116,6 +116,11 @@ public class ItemQueryService {
       return new ItemDataList(new ArrayList<>(), 0);
     } else {
       List<ItemData> items = itemReadService.findItemsOfSellers(followedUsers, page);
+      int offset = page.getOffset();
+      int limit = page.getLimit();
+      int endIndex = Math.min(offset + limit, items.size());
+      items = items.subList(offset, endIndex);
+
       fillExtraInfo(items, user);
       int count = itemReadService.countFeedSize(followedUsers);
       return new ItemDataList(items, count);
@@ -134,9 +139,7 @@ public class ItemQueryService {
     Set<String> followingSellers =
         userRelationshipQueryService.followingSellers(
             currentUser.getId(),
-            items.stream()
-                .map(itemData1 -> itemData1.getProfileData().getId())
-                .collect(toList()));
+            items.stream().map(itemData1 -> itemData1.getProfileData().getId()).collect(toList()));
     items.forEach(
         itemData -> {
           if (followingSellers.contains(itemData.getProfileData().getId())) {
@@ -154,15 +157,13 @@ public class ItemQueryService {
         item -> {
           countMap.put(item.getId(), item.getCount());
         });
-    items.forEach(
-        itemData -> itemData.setFavoritesCount(countMap.get(itemData.getId())));
+    items.forEach(itemData -> itemData.setFavoritesCount(countMap.get(itemData.getId())));
   }
 
   private void setIsFavorite(List<ItemData> items, User currentUser) {
     Set<String> favoritedItems =
         itemFavoritesReadService.userFavorites(
-            items.stream().map(itemData -> itemData.getId()).collect(toList()),
-            currentUser);
+            items.stream().map(itemData -> itemData.getId()).collect(toList()), currentUser);
 
     items.forEach(
         itemData -> {

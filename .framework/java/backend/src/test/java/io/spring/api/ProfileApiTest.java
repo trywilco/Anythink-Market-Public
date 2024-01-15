@@ -54,7 +54,7 @@ public class ProfileApiTest extends TestWithCurrentUser {
     when(profileQueryService.findByUsername(eq(profileData.getUsername()), eq(null)))
         .thenReturn(Optional.of(profileData));
     RestAssuredMockMvc.when()
-        .get("/profiles/{username}", profileData.getUsername())
+        .get("/api/profiles/{username}", profileData.getUsername())
         .prettyPeek()
         .then()
         .statusCode(200)
@@ -68,7 +68,7 @@ public class ProfileApiTest extends TestWithCurrentUser {
     given()
         .header("Authorization", "Token " + token)
         .when()
-        .post("/profiles/{username}/follow", anotherUser.getUsername())
+        .post("/api/profiles/{username}/follow", anotherUser.getUsername())
         .prettyPeek()
         .then()
         .statusCode(200);
@@ -86,7 +86,7 @@ public class ProfileApiTest extends TestWithCurrentUser {
     given()
         .header("Authorization", "Token " + token)
         .when()
-        .delete("/profiles/{username}/follow", anotherUser.getUsername())
+        .delete("/api/profiles/{username}/follow", anotherUser.getUsername())
         .prettyPeek()
         .then()
         .statusCode(200);

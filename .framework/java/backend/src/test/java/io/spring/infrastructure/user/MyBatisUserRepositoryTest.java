@@ -19,22 +19,22 @@ public class MyBatisUserRepositoryTest extends DbTestBase {
 
   @BeforeEach
   public void setUp() {
-    user = new User("aisensiy@163.com", "aisensiy", "123", "", "default");
+    user = new User("aisensiy@16322.com", "aisensiy999", "1234", "", "");
   }
 
   @Test
   public void should_save_and_fetch_user_success() {
     userRepository.save(user);
-    Optional<User> userOptional = userRepository.findByUsername("aisensiy");
+    Optional<User> userOptional = userRepository.findByUsername("aisensiy999");
     Assertions.assertEquals(userOptional.get(), user);
-    Optional<User> userOptional2 = userRepository.findByEmail("aisensiy@163.com");
+    Optional<User> userOptional2 = userRepository.findByEmail("aisensiy@16322.com");
     Assertions.assertEquals(userOptional2.get(), user);
   }
 
   @Test
   public void should_update_user_success() {
     String newEmail = "newemail@email.com";
-    user.update(newEmail, "", "", "", "");
+    user.update(newEmail, "aa", "bb", "cc", "dd");
     userRepository.save(user);
     Optional<User> optional = userRepository.findByUsername(user.getUsername());
     Assertions.assertTrue(optional.isPresent());

@@ -5,6 +5,7 @@ import io.spring.core.item.ItemRepository;
 import io.spring.core.item.Tag;
 import io.spring.infrastructure.mybatis.mapper.ItemMapper;
 import java.util.Optional;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +36,8 @@ public class MyBatisItemRepository implements ItemRepository {
                     itemMapper.insertTag(tag);
                     return tag;
                   });
-      itemMapper.insertItemTagRelation(item.getId(), targetTag.getId());
+
+      itemMapper.insertItemTagRelation(item.getId(), targetTag.getId(), new DateTime());
     }
     itemMapper.insert(item);
   }

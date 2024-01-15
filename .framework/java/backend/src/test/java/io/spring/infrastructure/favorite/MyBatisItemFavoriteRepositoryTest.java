@@ -13,8 +13,7 @@ import org.springframework.context.annotation.Import;
 public class MyBatisItemFavoriteRepositoryTest extends DbTestBase {
   @Autowired private ItemFavoriteRepository itemFavoriteRepository;
 
-  @Autowired
-  private io.spring.infrastructure.mybatis.mapper.ItemFavoriteMapper itemFavoriteMapper;
+  @Autowired private io.spring.infrastructure.mybatis.mapper.ItemFavoriteMapper itemFavoriteMapper;
 
   @Test
   public void should_save_and_fetch_itemFavorite_success() {

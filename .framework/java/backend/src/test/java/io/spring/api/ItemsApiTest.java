@@ -12,9 +12,9 @@ import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.spring.JacksonCustomizations;
 import io.spring.api.security.WebSecurityConfig;
 import io.spring.application.ItemQueryService;
-import io.spring.application.item.ItemCommandService;
 import io.spring.application.data.ItemData;
 import io.spring.application.data.ProfileData;
+import io.spring.application.item.ItemCommandService;
 import io.spring.core.item.Item;
 import java.util.HashMap;
 import java.util.List;
@@ -71,8 +71,7 @@ public class ItemsApiTest extends TestWithCurrentUser {
     when(itemCommandService.createItem(any(), any()))
         .thenReturn(new Item(title, description, image, tagList, user.getId()));
 
-    when(itemQueryService.findBySlug(eq(Item.toSlug(title)), any()))
-        .thenReturn(Optional.empty());
+    when(itemQueryService.findBySlug(eq(Item.toSlug(title)), any())).thenReturn(Optional.empty());
 
     when(itemQueryService.findById(any(), any())).thenReturn(Optional.of(itemData));
 
@@ -81,12 +80,11 @@ public class ItemsApiTest extends TestWithCurrentUser {
         .header("Authorization", "Token " + token)
         .body(param)
         .when()
-        .post("/items")
+        .post("/api/items")
         .then()
         .statusCode(200)
         .body("item.title", equalTo(title))
         .body("item.favorited", equalTo(false))
-        .body("item.body", equalTo(body))
         .body("item.favoritesCount", equalTo(0))
         .body("item.seller.username", equalTo(user.getUsername()))
         .body("item.seller.id", equalTo(null));
@@ -96,9 +94,9 @@ public class ItemsApiTest extends TestWithCurrentUser {
 
   @Test
   public void should_get_error_message_with_wrong_parameter() throws Exception {
-    String title = "How to train your dragon";
+    String title = "";
     String description = "Ever wonder how?";
-    String image = "";
+    String image = "Image URL";
     String[] tagList = {"reactjs", "angularjs", "dragons"};
     Map<String, Object> param = prepareParam(title, description, image, asList(tagList));
 
@@ -107,11 +105,11 @@ public class ItemsApiTest extends TestWithCurrentUser {
         .header("Authorization", "Token " + token)
         .body(param)
         .when()
-        .post("/items")
+        .post("/api/items")
         .prettyPeek()
         .then()
         .statusCode(422)
-        .body("errors.body[0]", equalTo("can't be empty"));
+        .body("errors.title[0]", equalTo("can't be empty"));
   }
 
   @Test
@@ -129,7 +127,7 @@ public class ItemsApiTest extends TestWithCurrentUser {
             slug,
             title,
             description,
-            body,
+            image,
             false,
             0,
             new DateTime(),
@@ -147,14 +145,17 @@ public class ItemsApiTest extends TestWithCurrentUser {
         .header("Authorization", "Token " + token)
         .body(param)
         .when()
-        .post("/items")
+        .post("/api/items")
         .prettyPeek()
         .then()
         .statusCode(422);
   }
 
   private HashMap<String, Object> prepareParam(
-      final String title, final String description, final String image, final List<String> tagList) {
+      final String title,
+      final String description,
+      final String image,
+      final List<String> tagList) {
     return new HashMap<String, Object>() {
       {
         put(

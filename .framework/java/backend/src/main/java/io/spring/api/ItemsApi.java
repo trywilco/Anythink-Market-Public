@@ -6,7 +6,9 @@ import io.spring.application.item.ItemCommandService;
 import io.spring.application.item.NewItemParam;
 import io.spring.core.item.Item;
 import io.spring.core.user.User;
+import io.spring.infrastructure.service.SendEventService;
 import java.util.HashMap;
+import java.util.Map;
 import javax.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "/items")
+@RequestMapping(path = "/api/items")
 @AllArgsConstructor
 public class ItemsApi {
   private ItemCommandService itemCommandService;
@@ -29,6 +31,12 @@ public class ItemsApi {
   public ResponseEntity createItem(
       @Valid @RequestBody NewItemParam newItemParam, @AuthenticationPrincipal User user) {
     Item item = itemCommandService.createItem(newItemParam, user);
+
+    SendEventService sendEventService = new SendEventService();
+    Map<String, Object> metadata = new HashMap<>();
+    metadata.put("item", item.getTitle());
+    sendEventService.sendEvent("item_created", metadata);
+
     return ResponseEntity.ok(
         new HashMap<String, Object>() {
           {
@@ -54,7 +62,6 @@ public class ItemsApi {
       @RequestParam(value = "seller", required = false) String seller,
       @AuthenticationPrincipal User user) {
     return ResponseEntity.ok(
-        itemQueryService.findRecentItems(
-            tag, seller, favoritedBy, new Page(offset, limit), user));
+        itemQueryService.findRecentItems(tag, seller, favoritedBy, new Page(offset, limit), user));
   }
 }

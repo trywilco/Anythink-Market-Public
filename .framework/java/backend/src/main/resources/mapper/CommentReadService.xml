@@ -16,10 +16,12 @@
     <select id="findById" resultMap="transfer.data.commentData">
         <include refid="selectCommentData"/>
         where C.id = #{id}
+        order by C.created_at desc
     </select>
     <select id="findByItemId" resultMap="transfer.data.commentData">
         <include refid="selectCommentData"/>
         where C.item_id = #{itemId}
+        order by C.created_at desc
     </select>
     <select id="findByItemIdWithCursor" resultMap="transfer.data.commentData">
         <include refid="selectCommentData"/>

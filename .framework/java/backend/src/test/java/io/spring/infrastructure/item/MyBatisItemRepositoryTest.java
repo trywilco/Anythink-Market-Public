@@ -10,6 +10,7 @@ import io.spring.infrastructure.repository.MyBatisItemRepository;
 import io.spring.infrastructure.repository.MyBatisUserRepository;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.Random;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,9 +27,15 @@ public class MyBatisItemRepositoryTest extends DbTestBase {
 
   @BeforeEach
   public void setUp() {
-    User user = new User("aisensiy@gmail.com", "aisensiy", "123", "bio", "default");
+    Random random = new Random();
+    int randomNumber = random.nextInt();
+    User user =
+        new User(
+            "aisensiy" + randomNumber + "@gmail.com", "aisensiy" + randomNumber, "123", "", "");
     userRepository.save(user);
-    item = new Item("test", "desc", "image", "image", Arrays.asList("java", "spring"), user.getId());
+    item =
+        new Item(
+            "test-" + randomNumber, "desc", "image", Arrays.asList("java", "spring"), user.getId());
   }
 
   @Test
@@ -53,7 +60,6 @@ public class MyBatisItemRepositoryTest extends DbTestBase {
     Assertions.assertTrue(optional.isPresent());
     Item fetched = optional.get();
     Assertions.assertEquals(fetched.getTitle(), newTitle);
-    Assertions.assertNotEquals(fetched.getBody(), "");
   }
 
   @Test

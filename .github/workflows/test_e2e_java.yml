@@ -1,0 +1,60 @@
+name: E2E Java
+
+on:
+  pull_request:
+
+jobs:
+  ci-checks:
+    name: Pr checks
+    runs-on: ubuntu-20.04
+    timeout-minutes: 6
+
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_PASSWORD: postgres
+          SECRET_KEY: secret
+          POSTGRES_DB: anythink-market
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Check out project
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-java@v4
+        with:
+          working-directory: .framework/java/backend
+          java-version: 11
+          distribution: adopt
+
+      - uses: oNaiPs/secrets-to-env-action@v1
+        with:
+          secrets: ${{ toJSON(secrets) }}
+
+      - run: ./gradlew build
+        working-directory: .framework/java/backend
+
+      - run: ENGINE_BASE_URL=http://localhost:3003 WILCO_ID=0 SPRING_DATASOURCE_URL=jdbc:postgresql://localhost/anythink-market SPRING_DATASOURCE_USERNAME=postgres SPRING_DATASOURCE_PASSWORD=postgres ./gradlew bootRun >& /dev/null &
+        working-directory: .framework/java/backend
+
+      - name: Run checks
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+          cache: "yarn"
+          cache-dependency-path: tests/e2e/yarn.lock
+
+      - run: yarn install
+        working-directory: tests/e2e/
+
+      - run: yarn wait-on http://localhost:3000/health --timeout 20000
+        working-directory: tests/e2e/
+
+      - run: yarn jest -c jest.sequential.config.js --maxWorkers=1  # TODO skip concurrent tests until fixed
+        working-directory: tests/e2e/

@@ -9,17 +9,17 @@ import io.spring.api.exception.ResourceNotFoundException;
 import io.spring.application.item.ItemCommandService;
 import io.spring.application.item.NewItemParam;
 import io.spring.application.item.UpdateItemParam;
-import io.spring.core.item.Item;
-import io.spring.core.item.ItemRepository;
 import io.spring.core.favorite.ItemFavorite;
 import io.spring.core.favorite.ItemFavoriteRepository;
+import io.spring.core.item.Item;
+import io.spring.core.item.ItemRepository;
 import io.spring.core.service.AuthorizationService;
 import io.spring.core.user.User;
 import io.spring.graphql.DgsConstants.MUTATION;
 import io.spring.graphql.exception.AuthenticationException;
-import io.spring.graphql.types.ItemPayload;
 import io.spring.graphql.types.CreateItemInput;
 import io.spring.graphql.types.DeletionStatus;
+import io.spring.graphql.types.ItemPayload;
 import io.spring.graphql.types.UpdateItemInput;
 import java.util.Collections;
 import lombok.AllArgsConstructor;
@@ -33,8 +33,7 @@ public class ItemMutation {
   private ItemRepository itemRepository;
 
   @DgsMutation(field = MUTATION.CreateItem)
-  public DataFetcherResult<ItemPayload> createItem(
-      @InputArgument("input") CreateItemInput input) {
+  public DataFetcherResult<ItemPayload> createItem(@InputArgument("input") CreateItemInput input) {
     User user = SecurityUtil.getCurrentUser().orElseThrow(AuthenticationException::new);
     NewItemParam newItemParam =
         NewItemParam.builder()
@@ -53,8 +52,7 @@ public class ItemMutation {
   @DgsMutation(field = MUTATION.UpdateItem)
   public DataFetcherResult<ItemPayload> updateItem(
       @InputArgument("slug") String slug, @InputArgument("changes") UpdateItemInput params) {
-    Item item =
-        itemRepository.findBySlug(slug).orElseThrow(ResourceNotFoundException::new);
+    Item item = itemRepository.findBySlug(slug).orElseThrow(ResourceNotFoundException::new);
     User user = SecurityUtil.getCurrentUser().orElseThrow(AuthenticationException::new);
     if (!AuthorizationService.canWriteItem(user, item)) {
       throw new NoAuthorizationException();
@@ -72,8 +70,7 @@ public class ItemMutation {
   @DgsMutation(field = MUTATION.FavoriteItem)
   public DataFetcherResult<ItemPayload> favoriteItem(@InputArgument("slug") String slug) {
     User user = SecurityUtil.getCurrentUser().orElseThrow(AuthenticationException::new);
-    Item item =
-        itemRepository.findBySlug(slug).orElseThrow(ResourceNotFoundException::new);
+    Item item = itemRepository.findBySlug(slug).orElseThrow(ResourceNotFoundException::new);
     ItemFavorite itemFavorite = new ItemFavorite(item.getId(), user.getId());
     itemFavoriteRepository.save(itemFavorite);
     return DataFetcherResult.<ItemPayload>newResult()
@@ -85,8 +82,7 @@ public class ItemMutation {
   @DgsMutation(field = MUTATION.UnfavoriteItem)
   public DataFetcherResult<ItemPayload> unfavoriteItem(@InputArgument("slug") String slug) {
     User user = SecurityUtil.getCurrentUser().orElseThrow(AuthenticationException::new);
-    Item item =
-        itemRepository.findBySlug(slug).orElseThrow(ResourceNotFoundException::new);
+    Item item = itemRepository.findBySlug(slug).orElseThrow(ResourceNotFoundException::new);
     itemFavoriteRepository
         .find(item.getId(), user.getId())
         .ifPresent(
@@ -102,8 +98,7 @@ public class ItemMutation {
   @DgsMutation(field = MUTATION.DeleteItem)
   public DeletionStatus deleteItem(@InputArgument("slug") String slug) {
     User user = SecurityUtil.getCurrentUser().orElseThrow(AuthenticationException::new);
-    Item item =
-        itemRepository.findBySlug(slug).orElseThrow(ResourceNotFoundException::new);
+    Item item = itemRepository.findBySlug(slug).orElseThrow(ResourceNotFoundException::new);
 
     if (!AuthorizationService.canWriteItem(user, item)) {
       throw new NoAuthorizationException();

@@ -17,13 +17,13 @@
         insert into tags (id, name) values (#{tag.id}, #{tag.name})
     </insert>
     <insert id="insertItemTagRelation">
-        insert into item_tags (item_id, tag_id) values(#{itemId}, #{tagId})
+        insert into item_tags (item_id, tag_id, created_at) values(#{itemId}, #{tagId}, #{createdAt})
     </insert>
     <update id="update">
         update items
           <set>
               <if test="item.title != ''">title = #{item.title},</if>
-              <if test="item.title != ''">slug = #{item.slug},</if>
+              <if test="item.slug != ''">slug = #{item.slug},</if>
               <if test="item.description != ''">description = #{item.description},</if>
               <if test="item.image != ''">image = #{item.image}</if>
           </set>
