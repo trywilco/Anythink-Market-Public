@@ -1,0 +1,9 @@
+FROM openjdk:11
+
+WORKDIR /usr/src
+COPY backend ./backend
+COPY .wilco ./.wilco
+
+# Pre-install packages
+WORKDIR /usr/src/backend
+RUN ./gradlew build
