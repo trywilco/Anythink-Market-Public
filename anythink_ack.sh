@@ -1,5 +1,9 @@
 #!/bin/sh
-sleep 10s
+
+# change ports visibility to public to avoid CORS issues
+if [ -n "$CODESPACE_NAME" ]; then
+  .devcontainer/open_port.sh >/dev/null 2>&1
+fi
 
 echo "Welcome to"
 echo "     _                      _     _       _           _     "
