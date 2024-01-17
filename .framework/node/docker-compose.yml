@@ -51,12 +51,8 @@ services:
   anythink-ack:
     image: public.ecr.aws/v0a2l7y2/wilco/anythink-ack:latest
     container_name: anythink-ack
-    command: sh -c "/wait-for-it.sh anythink-frontend-react:3001 -q -t 1000 && ./anythink_ack.sh"
     environment:
       - GITHUB_TOKEN=$GITHUB_TOKEN
       - CODESPACE_NAME=$CODESPACE_NAME
-    working_dir: /usr/src
-    volumes:
-      - ./:/usr/src/
     depends_on:
       - "anythink-frontend-react" 
