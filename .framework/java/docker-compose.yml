@@ -3,7 +3,7 @@ services:
   anythink-backend-java:
     build: ./backend
     container_name: anythink-backend-java
-    command: sh -c "cd backend && /wait-for-it.sh postgres-java:5432 -q -t 60 && ./gradlew bootRun"
+    command: sh -c "cd backend && /wait-for-it.sh postgres-java:5432 -q -t 60 && ./start.sh"
 
     environment:
       - PORT=3000
