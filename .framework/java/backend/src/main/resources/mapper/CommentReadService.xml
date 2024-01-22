@@ -10,7 +10,7 @@
         <include refid="io.spring.infrastructure.mybatis.readservice.ItemReadService.profileColumns"/>
         from comments C
         left join users U
-        on C.user_id = U.id
+        on C.seller_id = U.id
     </sql>
 
     <select id="findById" resultMap="transfer.data.commentData">

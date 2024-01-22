@@ -12,14 +12,14 @@ import org.joda.time.DateTime;
 public class Comment {
   private String id;
   private String body;
-  private String userId;
+  private String sellerId;
   private String itemId;
   private DateTime createdAt;
 
-  public Comment(String body, String userId, String itemId) {
+  public Comment(String body, String sellerId, String itemId) {
     this.id = UUID.randomUUID().toString();
     this.body = body;
-    this.userId = userId;
+    this.sellerId = sellerId;
     this.itemId = itemId;
     this.createdAt = new DateTime();
   }
