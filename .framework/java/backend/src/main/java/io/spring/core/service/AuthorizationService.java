@@ -10,6 +10,6 @@ public class AuthorizationService {
   }
 
   public static boolean canWriteComment(User user, Item item, Comment comment) {
-    return user.getId().equals(item.getSellerId()) || user.getId().equals(comment.getUserId());
+    return user.getId().equals(item.getSellerId()) || user.getId().equals(comment.getSellerId());
   }
 }
