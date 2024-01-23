@@ -1,0 +1,4 @@
+{
+  "name": "Anythink Development Container",
+  "image": "public.ecr.aws/v0a2l7y2/wilco/anythink-devcontainer-java:latest"
+}
