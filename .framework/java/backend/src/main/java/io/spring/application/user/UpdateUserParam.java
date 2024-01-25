@@ -1,7 +1,7 @@
 package io.spring.application.user;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
-import javax.validation.constraints.Email;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

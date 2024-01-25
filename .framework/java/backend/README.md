@@ -13,7 +13,7 @@ And the code is organized as this:
 
 # Getting started
 
-You'll need Java 11 installed.
+You'll need Java 21 installed.
 
     ./gradlew bootRun
 

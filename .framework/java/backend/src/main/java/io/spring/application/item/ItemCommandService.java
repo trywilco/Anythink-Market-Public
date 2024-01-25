@@ -3,7 +3,7 @@ package io.spring.application.item;
 import io.spring.core.item.Item;
 import io.spring.core.item.ItemRepository;
 import io.spring.core.user.User;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;

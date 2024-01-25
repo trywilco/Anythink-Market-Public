@@ -2,8 +2,8 @@ package io.spring.application.item;
 
 import io.spring.application.ItemQueryService;
 import io.spring.core.item.Item;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
 class DuplicatedItemValidator implements ConstraintValidator<DuplicatedItemConstraint, String> {
