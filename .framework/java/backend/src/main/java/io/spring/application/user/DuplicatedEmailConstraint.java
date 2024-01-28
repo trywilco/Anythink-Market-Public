@@ -1,9 +1,9 @@
 package io.spring.application.user;
 
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import javax.validation.Constraint;
-import javax.validation.Payload;
 
 @Constraint(validatedBy = DuplicatedEmailValidator.class)
 @Retention(RetentionPolicy.RUNTIME)
