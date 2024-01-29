@@ -47,6 +47,8 @@ public class WebSecurityConfig {
                     .permitAll()
                     .requestMatchers("/actuator/**")
                     .permitAll()
+                    .requestMatchers("/error")
+                    .permitAll()
                     .requestMatchers("/health")
                     .permitAll()
                     .requestMatchers("/api/ping")
