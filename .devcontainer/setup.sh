@@ -14,3 +14,5 @@ echo "export CODESPACE_WDS_SOCKET_PORT=443" >> ~/.bashrc
 # Export welcome prompt in bash:
 echo "printf \"\n\n☁️☁️☁️️ Anythink: Develop in the Cloud ☁️☁️☁️\n\"" >> ~/.bashrc
 echo "printf \"\n\x1b[31m \x1b[1m👉 Type: \\\`docker compose up\\\` to run the project. 👈\n\n\"" >> ~/.bashrc
+
+nohup bash -c 'cd /wilco-agent && sudo env PATH=$PATH npm install && node agent.js &' > /dev/null 2>&1  
