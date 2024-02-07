@@ -10,6 +10,8 @@ curl -L -X POST "${ENGINE_EVENT_ENDPOINT}" -H "Content-Type: application/json" -
 echo "export CODESPACE_BACKEND_HOST=\"${CODESPACE_BACKEND_HOST}\"" >> ~/.bashrc
 echo "export CODESPACE_BACKEND_URL=\"${CODESPACE_BACKEND_URL}\"" >> ~/.bashrc
 echo "export CODESPACE_WDS_SOCKET_PORT=443" >> ~/.bashrc
+echo "export ENGINE_EVENT_ENDPOINT=\"${ENGINE_EVENT_ENDPOINT}\"" >> ~/.bashrc
+
 
 # Export welcome prompt in bash:
 echo "printf \"\n\n☁️☁️☁️️ Anythink: Develop in the Cloud ☁️☁️☁️\n\"" >> ~/.bashrc
