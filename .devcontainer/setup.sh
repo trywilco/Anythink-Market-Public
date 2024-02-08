@@ -15,4 +15,4 @@ echo "export CODESPACE_WDS_SOCKET_PORT=443" >> ~/.bashrc
 echo "printf \"\n\n☁️☁️☁️️ Anythink: Develop in the Cloud ☁️☁️☁️\n\"" >> ~/.bashrc
 echo "printf \"\n\x1b[31m \x1b[1m👉 Type: \\\`docker compose up\\\` to run the project. 👈\n\n\"" >> ~/.bashrc
 
-nohup bash -c "cd /wilco-agent && node agent.js &" > /dev/null 2>&1  
+nohup bash -c "cd /wilco-agent && node agent.js &" >> /tmp/agent.log 2>&1 
