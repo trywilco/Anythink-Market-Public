@@ -6,7 +6,7 @@ Please find more info about each part in the relevant Readme file ([frontend](fr
 
 ## Development
 
-When implementing a new feature or fixing a bug, please create a new pull request against `main` from a feature/bug branch and add `@vanessa-cooper` as reviewer.
+When implementing a new feature or fixing a bug, please create a new pull request against `main` from a feature/bug branch and the Wilco app review it right away
 
 ## How to run in dev mode?
 
