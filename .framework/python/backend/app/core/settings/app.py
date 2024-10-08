@@ -22,7 +22,7 @@ class AppSettings(BaseAppSettings):
     max_connection_count: int = 5
     min_connection_count: int = 5
 
-    secret_key: SecretStr = SecretStr("secret")
+    secret_key: SecretStr = SecretStr("e6F9KvSDf4dyXj")
 
     api_prefix: str = "/api"
 

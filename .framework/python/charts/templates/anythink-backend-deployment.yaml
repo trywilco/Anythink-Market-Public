@@ -26,7 +26,7 @@ spec:
             - name: APP_ENV
               value: dev
             - name: SECRET_KEY
-              value: secret
+              value: e6F9KvSDf4dyXj
             - name: DEBUG
               value: "True"
             - name: DATABASE_URL
