@@ -1,6 +1,6 @@
 services:
   anythink-backend-java:
-    build: ./backend
+    image: public.ecr.aws/v0a2l7y2/wilco/anythink-backend-java:latest
     container_name: anythink-backend-java
     command: sh -c "cd backend && /wait-for-it.sh postgres-java:5432 -q -t 60 && ./start.sh"
 
@@ -17,9 +17,9 @@ services:
       - "postgres-java"
 
   anythink-frontend-react:
-    build: ./frontend
+    image: public.ecr.aws/v0a2l7y2/wilco/anythink-frontend-react:latest
     container_name: anythink-frontend-react
-    command: sh -c "cd frontend && yarn install && /wait-for-it.sh anythink-backend-java:3000 -t 120 --strict -- curl --head -X GET --retry 30 --retry-connrefused --retry-delay 1 anythink-backend-java:3000/api/ping && yarn start"
+    command: sh -c "cd frontend && /wait-for-it.sh anythink-backend-java:3000 -t 120 --strict -- curl --head -X GET --retry 30 --retry-connrefused --retry-delay 1 anythink-backend-java:3000/api/ping && yarn start"
     environment:
       - NODE_ENV=development
       - PORT=3001
