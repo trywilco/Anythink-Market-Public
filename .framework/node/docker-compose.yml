@@ -1,8 +1,8 @@
 services:
   anythink-backend-node:
-    build: ./backend
+    image: public.ecr.aws/v0a2l7y2/wilco/anythink-backend-node:latest
     container_name: anythink-backend-node
-    command: sh -c "cd backend && yarn install && /wait-for-it.sh mongodb-node:27017 -q -t 60 && yarn dev"
+    command: sh -c "cd backend && /wait-for-it.sh mongodb-node:27017 -q -t 60 && yarn dev"
 
     environment:
       - NODE_ENV=development
@@ -19,9 +19,9 @@ services:
       - "mongodb-node"
 
   anythink-frontend-react:
-    build: ./frontend
+    image: public.ecr.aws/v0a2l7y2/wilco/anythink-frontend-react:latest
     container_name: anythink-frontend-react
-    command: sh -c "cd frontend && yarn install && /wait-for-it.sh anythink-backend-node:3000 -t 120 --strict -- curl --head -X GET --retry 30 --retry-connrefused --retry-delay 1 anythink-backend-node:3000/api/ping && yarn start"
+    command: sh -c "cd frontend && /wait-for-it.sh anythink-backend-node:3000 -t 120 --strict -- curl --head -X GET --retry 30 --retry-connrefused --retry-delay 1 anythink-backend-node:3000/api/ping && yarn start"
     environment:
       - NODE_ENV=development
       - PORT=3001

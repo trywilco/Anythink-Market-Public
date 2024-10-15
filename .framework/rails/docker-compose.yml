@@ -1,6 +1,6 @@
 services:
   anythink-backend-rails:
-    build: ./backend
+    image: public.ecr.aws/v0a2l7y2/wilco/anythink-backend-rails:latest
     container_name: anythink-backend-rails
     command: sh -c "cd backend && bundle install && /wait-for-it.sh postgres-rails:5432 -q -t 60 && ./start_rails.sh"
 
@@ -18,9 +18,9 @@ services:
       - "postgres-rails"
 
   anythink-frontend-react:
-    build: ./frontend
+    image: public.ecr.aws/v0a2l7y2/wilco/anythink-frontend-react:latest
     container_name: anythink-frontend-react
-    command: sh -c "cd frontend && yarn install && /wait-for-it.sh anythink-backend-rails:3000 -t 120 --strict -- curl --head -X GET --retry 30 --retry-connrefused --retry-delay 1 anythink-backend-rails:3000/api/ping  && yarn start"
+    command: sh -c "cd frontend && /wait-for-it.sh anythink-backend-rails:3000 -t 120 --strict -- curl --head -X GET --retry 30 --retry-connrefused --retry-delay 1 anythink-backend-rails:3000/api/ping  && yarn start"
     environment:
       - NODE_ENV=development
       - PORT=3001
