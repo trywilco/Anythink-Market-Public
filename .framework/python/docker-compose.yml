@@ -1,6 +1,5 @@
 services:
   anythink-backend-python:
-    build: ./backend
     image: public.ecr.aws/v0a2l7y2/wilco/anythink-backend-python:latest
     container_name: anythink-backend-python
     command: >
