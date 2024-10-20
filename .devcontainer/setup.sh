@@ -17,7 +17,8 @@ echo "printf \"\n\x1b[31m \x1b[1m👉 Type: \\\`docker compose up\\\` to run the
 
 nohup bash -c "cd /wilco-agent && node agent.js &" >> /tmp/agent.log 2>&1
 
-if command -v docker-compose &> /dev/null
+# Check if docker is installed
+if command -v docker &> /dev/null
 then
     docker compose pull
 fi
